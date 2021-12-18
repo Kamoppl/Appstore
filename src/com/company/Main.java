@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import Players.PlayerOne;
 import Projects.Project;
-import Projects.EasyProject;
-import Projects.MediumProject;
-import Projects.HardProject;
 
 public class Main {
     public static int day = 0;
@@ -18,68 +16,26 @@ public class Main {
     public static boolean skip = false;
     public static int mistake = 0;
     static List<String> playerList = new ArrayList<>(numberOfPlayers);
+    List<Integer> playersList = new ArrayList<>();
     public Project project;
+    public static int currentPlayer = 0;
+    public PlayerOne playerOne;
+    public static ArrayList<Player> createdPlayers;
 
-    public class Difficulty {
-        public static int easy = 0;
-        public static int medium = 1;
-        public static int hard = 2;
-    }
 
     public static void main(String[] args) {
+                  /// Dodaj graczy
+        createdPlayers=createPlayers();
 
-
-        Scanner in = new Scanner(System.in);
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Ilu graczy weźmie udział w grze");
-        numberOfPlayers = in.nextInt();
-
-        getProjects();
-        try {
-            for (int i = 1; i <= numberOfPlayers; i++) {
-                System.out.println("Wprowadź imie gracza nr " + i);
-                playerName = scan.nextLine();
-                Player player = new Player(playerName);
-                playerList.add(playerName);
-                System.out.println(" Imie gracza to " + playerName);
-
-            }
-            System.out.println(playerList.get(0));
-            System.out.println("Imie graczy to " + playerList);
-            System.out.println("Tylu graczy weźmie udział w grze " + numberOfPlayers);
-        } catch (Exception IndexOutOfBoundsException) {
-            System.out.println("Błąd tworzenia zawodników");
-            end = true;
+        while (!end){
+            day();
         }
-        int currentPlayer = 0;
-/// Dodaj graczy
-        while (!end) {
 
-            try {
-                for (int i = 1; i <= numberOfPlayers + mistake; i++) {
-                    System.out.println("Kolejność graczy to :" + playerList);
-                    System.out.println("Ruch gracza: " + playerList.get(currentPlayer)); //pokazuje gracza
-                    menu();
 
-                    if (!skip) {
-                        playerList.add(playerList.get(currentPlayer)); //ustawnienie nastepnych graczy
-                        playerList.remove(0);  //ustawnienie nastepnych graczy
-                    }
-                    skip = false;
-                }
-                mistake = 0;
-            } catch (Exception IndexOutOfBoundsException) {
-                System.out.println("Błąd tworzenia zawodników");
-                end = true;
-            }
-            day = day + 1;
-            b = b + 1; //<=================================================================to konczy gre
-            if (b == 5) {// < ============================================================to konczy gre tu ile dni ma trwac gra też jest dodane
-                end = true;
-            }
-        }
+
 
     }
+
 
     public static void menu() {
         try {
@@ -99,6 +55,7 @@ public class Main {
                     System.out.println("6.Zatrudnić nowego pracownika");
                     System.out.println("7.Zwolnić pracownika");
                     System.out.println("8.Przeznaczyć dzień na rozliczenia z urzędami (jeśli nie poświęcisz na to 2 dni w miesiącu ZUS wjeżdża z taką kontrolą, że zamykasz firmę z długami)");
+                    System.out.println("9.Sprawdź jak tam twoje staty na dzień dzisiejszy");
                     Scanner in = new Scanner(System.in);
                     int chosenNumber = in.nextInt();
 
@@ -135,13 +92,14 @@ public class Main {
                         // do something...
 
                         case 8 -> System.out.println("You've chosen option #8");
+                        case 9 -> System.out.println("You've chosen option #8");
 
 
                         // do something...
 
                         default -> System.out.println("Zły wybór.");
                     }
-
+a
 
                 }
                 while (false);
@@ -156,21 +114,12 @@ public class Main {
 
     }
 
-    @Override
-    public String toString() {
-        return "Main{" +
-                "project=" + project +
-                '}';
-    }
 
     public static void getProjects() {
         System.out.println("Które projekt chcesz wybrać:" + "\r\n" + "Łatwy wybierz 1" + "\r\n" + "Średni wybierz 2" + "\r\n" + "Ciężki wybierz 3");
         Scanner in = new Scanner(System.in);
-        Player player = new Player("Kamil");
         int choseProject = in.nextInt();
-        if (choseProject == 1) {
-            player.project = new Project();
-            System.out.println(player.project.toString());
+        if (choseProject == 1) {createdPlayers.get(1);
         }
         if (choseProject == 2) {
         }
@@ -179,5 +128,74 @@ public class Main {
 
 
     }
+
+    public static ArrayList createPlayers() {
+        Scanner in = new Scanner(System.in);
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Ilu graczy weźmie udział w grze");
+        numberOfPlayers = in.nextInt();
+
+        try {
+            for (int i = 1; i <= numberOfPlayers; i++) {
+                System.out.println("Wprowadź imie gracza nr " + i);
+                playerName = scan.nextLine();
+                playerList.add(playerName);
+                System.out.println(" Imie gracza to " + playerName);
+
+            }
+
+
+
+
+
+
+            System.out.println("Imie graczy to " + playerList);
+            System.out.println("Tylu graczy weźmie udział w grze " + numberOfPlayers);
+        } catch (Exception IndexOutOfBoundsException) {
+            System.out.println("Błąd tworzenia zawodników");
+            end = true;
+        }
+        ArrayList<Player> currentplayers = new ArrayList<>();
+
+        for (int i = 1; i <= numberOfPlayers; i++) {
+
+            Player Player = new Player(playerList.get(i-1), 1000, 0, 0, 0);
+            currentplayers.add(Player);
+        }
+        return currentplayers;
+    }
+
+    public static void day() {
+        while (!end) {
+
+            try {
+                for (int i = 1; i <= numberOfPlayers + mistake; i++) {
+                    System.out.println("Kolejność graczy to :" + playerList);
+                    System.out.println("Ruch gracza: " + playerList.get(0)); //pokazuje gracza
+                    menu();
+
+                    if (!skip) {
+                        playerList.add(playerList.get(0)); //ustawnienie obecnego gracza na koniec kolejki
+                        playerList.remove(0);  //usuwa gracza obecnego z kolejki
+
+                    }
+                    currentPlayer = currentPlayer + 1;
+                    skip = false;
+                }
+                mistake = 0;
+            } catch (Exception IndexOutOfBoundsException) {
+                System.out.println("Błąd tworzenia zawodników");
+                end = true;
+            }
+            currentPlayer = 0;
+
+            day = day + 1;
+            b = b + 1; //<=================================================================to konczy gre
+            if (b == 5) {// < ============================================================to konczy gre tu ile dni ma trwac gra też jest dodane
+                end = true;
+            }
+        }
+    }
+
 }
 
