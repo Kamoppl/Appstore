@@ -27,6 +27,7 @@ public class Main {
                   /// Dodaj graczy
         createdPlayers=createPlayers();
 
+
         while (!end){
             day();
         }
@@ -99,7 +100,6 @@ public class Main {
 
                         default -> System.out.println("Zły wybór.");
                     }
-a
 
                 }
                 while (false);
@@ -157,6 +157,7 @@ a
         }
         ArrayList<Player> currentplayers = new ArrayList<>();
 
+
         for (int i = 1; i <= numberOfPlayers; i++) {
 
             Player Player = new Player(playerList.get(i-1), 1000, 0, 0, 0);
@@ -196,6 +197,18 @@ a
             }
         }
     }
+    ArrayList<Project>playersEasyProjects = new ArrayList<>();
+    ArrayList<Project>playersMediumProjects = new ArrayList<>();
+    ArrayList<Project>playersHardProjects = new ArrayList<>();
+    public static ArrayList generateEasyProject(){
+        playersEasyProjects.add()
+        for (int i = 1; i <= numberOfPlayers; i++) {
 
+            Player Player = new Player(playerList.get(i-1), 1000, 0, 0, 0);
+            currentplayers.add(Player);
+        }
+
+        return ArrayList
+}
 }
 
