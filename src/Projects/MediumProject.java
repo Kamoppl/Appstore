@@ -19,15 +19,13 @@ public class MediumProject {
 
 
 
-    public void Project(String projectName, Dayneeded dayNeeded, String client, Integer deadLine, Integer penaltyCost, Integer cost, Integer payDay,Integer Difficulty ){
+    public  MediumProject(){
         this.projectName = randomString(5);
-        this.dayNeeded = dayNeeded;
         this.client = randomString(3);
         this.deadLine = getRandomNumber(4,6);
         this.penaltyCost = getRandomNumber(300,500);
         this.income = getRandomNumber(1000,2000);
         this.payDay = getRandomNumber(1,2);
-        this.difficulty=1;
 
     }
 

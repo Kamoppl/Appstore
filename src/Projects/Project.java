@@ -6,7 +6,6 @@ import java.security.SecureRandom;
 
 public class Project {
     public String projectName;
-
     public String client;
     public Integer deadLine;
     public Integer penaltyCost;
@@ -29,6 +28,20 @@ public class Project {
         this.payDay = getRandomNumber(0,5);
         this.difficulty=getRandomNumber(0,2);
 
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "projectName='" + projectName + '\'' +
+                ", client='" + client + '\'' +
+                ", deadLine=" + deadLine +
+                ", penaltyCost=" + penaltyCost +
+                ", income=" + income +
+                ", payDay=" + payDay +
+                ", difficulty=" + difficulty +
+                ", project=" + project +
+                '}';
     }
 
     String randomString(int len){

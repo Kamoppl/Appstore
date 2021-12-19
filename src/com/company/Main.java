@@ -3,9 +3,13 @@ package com.company;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.security.SecureRandom;
 
 import Players.PlayerOne;
+import Projects.EasyProject;
 import Projects.Project;
+import Projects.MediumProject;
+import Projects.HardProject;
 
 public class Main {
     public static int day = 0;
@@ -19,20 +23,22 @@ public class Main {
     List<Integer> playersList = new ArrayList<>();
     public Project project;
     public static int currentPlayer = 0;
+    public Integer currentProject = 0;
     public PlayerOne playerOne;
-    public static ArrayList<Player> createdPlayers;
+    public static ArrayList createdPlayers;
+    static final String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    static SecureRandom rnd = new SecureRandom();
+    public static ArrayList<ArrayList> AllProjects = new ArrayList<>();
 
 
     public static void main(String[] args) {
-                  /// Dodaj graczy
-        createdPlayers=createPlayers();
+        /// Dodaj graczy
+        createdPlayers = createPlayers();
+        AllProjects.add(generateEasyProject());
 
-
-        while (!end){
+        while (!end) {
             day();
         }
-
-
 
 
     }
@@ -93,10 +99,13 @@ public class Main {
                         // do something...
 
                         case 8 -> System.out.println("You've chosen option #8");
-                        case 9 -> System.out.println("You've chosen option #8");
+                        case 9 -> {
+                            System.out.println("Wybrałeś opcje 9");
+                            System.out.println(createdPlayers.get(currentPlayer).toString());
+                            skip = true;
 
 
-                        // do something...
+                        }
 
                         default -> System.out.println("Zły wybór.");
                     }
@@ -119,7 +128,8 @@ public class Main {
         System.out.println("Które projekt chcesz wybrać:" + "\r\n" + "Łatwy wybierz 1" + "\r\n" + "Średni wybierz 2" + "\r\n" + "Ciężki wybierz 3");
         Scanner in = new Scanner(System.in);
         int choseProject = in.nextInt();
-        if (choseProject == 1) {createdPlayers.get(1);
+        if (choseProject == 1) {
+            createdPlayers.get(1);
         }
         if (choseProject == 2) {
         }
@@ -127,6 +137,41 @@ public class Main {
         }
 
 
+    }
+
+
+    public static void day() {
+        while (!end) {
+
+            try {
+                for (int i = 1; i <= numberOfPlayers + mistake; i++) {
+                    System.out.println("Kolejność graczy to :" + playerList);
+                    System.out.println("Ruch gracza: " + playerList.get(0)); //pokazuje gracza
+                    menu();
+
+                    if (!skip) {
+                        playerList.add(playerList.get(0)); //ustawnienie obecnego gracza na koniec kolejki
+                        playerList.remove(0);  //usuwa gracza obecnego z kolejki
+
+                    }
+                    currentPlayer = currentPlayer + 1;
+
+                }
+                mistake = 0;
+            } catch (Exception IndexOutOfBoundsException) {
+                System.out.println("Błąd tworzenia zawodników");
+                end = true;
+            }
+            currentPlayer = 0;
+            if (!skip) {
+                day = day + 1;
+                b = b + 1; //<=================================================================to konczy gre
+            }
+            skip =false;
+            if (b == 5) {// < ============================================================to konczy gre tu ile dni ma trwac gra też jest dodane
+                end = true;
+            }
+        }
     }
 
     public static ArrayList createPlayers() {
@@ -145,10 +190,6 @@ public class Main {
             }
 
 
-
-
-
-
             System.out.println("Imie graczy to " + playerList);
             System.out.println("Tylu graczy weźmie udział w grze " + numberOfPlayers);
         } catch (Exception IndexOutOfBoundsException) {
@@ -160,55 +201,56 @@ public class Main {
 
         for (int i = 1; i <= numberOfPlayers; i++) {
 
-            Player Player = new Player(playerList.get(i-1), 1000, 0, 0, 0);
+            Player Player = new Player(playerList.get(i - 1), 1000, 0, 0, 0);
             currentplayers.add(Player);
         }
         return currentplayers;
     }
 
-    public static void day() {
-        while (!end) {
-
-            try {
-                for (int i = 1; i <= numberOfPlayers + mistake; i++) {
-                    System.out.println("Kolejność graczy to :" + playerList);
-                    System.out.println("Ruch gracza: " + playerList.get(0)); //pokazuje gracza
-                    menu();
-
-                    if (!skip) {
-                        playerList.add(playerList.get(0)); //ustawnienie obecnego gracza na koniec kolejki
-                        playerList.remove(0);  //usuwa gracza obecnego z kolejki
-
-                    }
-                    currentPlayer = currentPlayer + 1;
-                    skip = false;
-                }
-                mistake = 0;
-            } catch (Exception IndexOutOfBoundsException) {
-                System.out.println("Błąd tworzenia zawodników");
-                end = true;
-            }
-            currentPlayer = 0;
-
-            day = day + 1;
-            b = b + 1; //<=================================================================to konczy gre
-            if (b == 5) {// < ============================================================to konczy gre tu ile dni ma trwac gra też jest dodane
-                end = true;
-            }
-        }
+    public static String randomString(int len) {
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++)
+            sb.append(AB.charAt(rnd.nextInt(AB.length())));
+        return sb.toString();
     }
-    ArrayList<Project>playersEasyProjects = new ArrayList<>();
-    ArrayList<Project>playersMediumProjects = new ArrayList<>();
-    ArrayList<Project>playersHardProjects = new ArrayList<>();
-    public static ArrayList generateEasyProject(){
-        playersEasyProjects.add()
-        for (int i = 1; i <= numberOfPlayers; i++) {
 
-            Player Player = new Player(playerList.get(i-1), 1000, 0, 0, 0);
-            currentplayers.add(Player);
-        }
+    public static int getRandomNumber(int min, int max) {
 
-        return ArrayList
-}
+        return (int) ((Math.random() * (max - min)) + min);
+    }
+
+
+    public static ArrayList generateEasyProject() {
+
+
+        ArrayList<EasyProject> easyProject = new ArrayList<>();
+        easyProject.add(new EasyProject());
+
+
+        return easyProject;
+
+    }
+
+    public static ArrayList generateMediumProject() {
+
+
+        ArrayList<MediumProject> mediumProject = new ArrayList<>();
+        mediumProject.add(new MediumProject());
+
+        return mediumProject;
+
+    }
+
+    public static ArrayList generateHardProject() {
+
+
+        ArrayList<HardProject> hardProject = new ArrayList<HardProject>();
+        hardProject.add(new HardProject());
+
+        return hardProject;
+
+    }
+
+
 }
 
