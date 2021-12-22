@@ -1,15 +1,13 @@
 package com.company;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.security.SecureRandom;
-
 import Players.PlayerOne;
 import Projects.EasyProject;
-import Projects.Project;
-import Projects.MediumProject;
 import Projects.HardProject;
+import Projects.MediumProject;
+import Projects.Project;
+
+import java.security.SecureRandom;
+import java.util.*;
 
 public class Main {
     public static int day = 0;
@@ -26,6 +24,7 @@ public class Main {
     public Integer currentProject = 0;
     public PlayerOne playerOne;
     public static ArrayList createdPlayers;
+
     static final String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static SecureRandom rnd = new SecureRandom();
     public static ArrayList<ArrayList> AllProjects = new ArrayList<>();
@@ -35,6 +34,13 @@ public class Main {
         /// Dodaj graczy
         createdPlayers = createPlayers();
         AllProjects.add(generateEasyProject());
+        AllProjects.add(generateMediumProject());
+        AllProjects.add(generateHardProject());
+        System.out.println(createdPlayers);
+        ArrayList a = new ArrayList((Collection) createdPlayers.get(0));
+        a.set(0,"a");
+        System.out.println(a.get(0)+"aaaaaaaaaaaaaaaaaaaaaaa");
+
 
         while (!end) {
             day();
@@ -167,7 +173,7 @@ public class Main {
                 day = day + 1;
                 b = b + 1; //<=================================================================to konczy gre
             }
-            skip =false;
+            skip = false;
             if (b == 5) {// < ============================================================to konczy gre tu ile dni ma trwac gra też jest dodane
                 end = true;
             }
@@ -220,7 +226,7 @@ public class Main {
     }
 
 
-    public static ArrayList generateEasyProject() {
+    public static ArrayList<EasyProject> generateEasyProject() {
 
 
         ArrayList<EasyProject> easyProject = new ArrayList<>();
@@ -231,7 +237,7 @@ public class Main {
 
     }
 
-    public static ArrayList generateMediumProject() {
+    public static ArrayList<MediumProject> generateMediumProject() {
 
 
         ArrayList<MediumProject> mediumProject = new ArrayList<>();
@@ -241,7 +247,7 @@ public class Main {
 
     }
 
-    public static ArrayList generateHardProject() {
+    public static ArrayList<HardProject> generateHardProject() {
 
 
         ArrayList<HardProject> hardProject = new ArrayList<HardProject>();
@@ -251,6 +257,41 @@ public class Main {
 
     }
 
+    public static void choseStartingProject() {
+        Scanner in = new Scanner(System.in);
+        int wrongMenuNumber = 0;
+        for (int i = 1; i <= numberOfPlayers + wrongMenuNumber; i++) {
+            int chosenProject = in.nextInt();
+
+            try {
+                do {
+                    System.out.println("Wybierz projekty pod względem trudności ");
+                    System.out.println("1. Ławty ");
+                    System.out.println("2. Średni ");
+                    System.out.println("3. Ciężki ");
+                    Scanner scan = new Scanner(System.in);
+
+                    switch (chosenProject) {
+                        case 1 -> {
+                            System.out.println("Projekt łatwy");
+                        }
+                        case 2 -> {
+                            System.out.println("Projekt średni");
+                        }
+
+                        case 3 -> {
+                            System.out.println("Projekt ciężki");                        }
+
+                    }
+                } while (false);
+            } catch (Exception IndexOutOfBoundsException) {
+                System.out.println("Błąd wyboru z menu");
+                wrongMenuNumber += 1;
+            }
+            mistake = 0;
+        }
+    }
 
 }
+
 

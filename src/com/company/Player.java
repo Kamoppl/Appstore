@@ -1,5 +1,6 @@
 package com.company;
 
+import Projects.AllProjects;
 import Projects.Project;
 
 public class Player {
@@ -7,8 +8,8 @@ public class Player {
     public Integer money = 1000;
     public Integer employee;
     public Integer availableProject=0;
-    public Project project;
     public Integer daySpentOnLookingForEmployee = 0;
+    public AllProjects playerProject;
 
 
     public Player(String name, Integer money, Integer employee, Integer availableProject, Integer daySpentOnLookingForEmployee) {

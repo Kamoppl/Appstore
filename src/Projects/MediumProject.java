@@ -5,37 +5,36 @@ import com.company.Dayneeded;
 import java.security.SecureRandom;
 
 public class MediumProject {
-    public String projectName;
-    public Dayneeded dayNeeded;
-    public String client;
-    public Integer deadLine;
-    public Integer penaltyCost;
-    public Integer income;
-    public Integer payDay;
-    public Integer difficulty=1;
-
+    public String projectName = randomString(5);
+    public String client = randomString(3);
+    public Integer deadLine = getRandomNumber(4, 6);
+    public Integer penaltyCost = getRandomNumber(300, 500);
+    public Integer income = getRandomNumber(1000, 2000);
+    public Integer payDay = getRandomNumber(1, 2);
     static final String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static SecureRandom rnd = new SecureRandom();
 
 
-
-    public  MediumProject(){
-        this.projectName = randomString(5);
-        this.client = randomString(3);
-        this.deadLine = getRandomNumber(4,6);
-        this.penaltyCost = getRandomNumber(300,500);
-        this.income = getRandomNumber(1000,2000);
-        this.payDay = getRandomNumber(1,2);
-
-    }
-
-    String randomString(int len){
+    String randomString(int len) {
         StringBuilder sb = new StringBuilder(len);
-        for(int i = 0; i < len; i++)
+        for (int i = 0; i < len; i++)
             sb.append(AB.charAt(rnd.nextInt(AB.length())));
         return sb.toString();
     }
+
     public int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
+    }
+
+    @Override
+    public String toString() {
+        return "MediumProject{" +
+                "projectName='" + projectName + '\'' +
+                ", client='" + client + '\'' +
+                ", deadLine=" + deadLine +
+                ", penaltyCost=" + penaltyCost +
+                ", income=" + income +
+                ", payDay=" + payDay +
+                '}';
     }
 }

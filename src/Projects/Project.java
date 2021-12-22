@@ -41,7 +41,7 @@ public class Project {
                 ", payDay=" + payDay +
                 ", difficulty=" + difficulty +
                 ", project=" + project +
-                '}';
+                '}'+"\n";
     }
 
     String randomString(int len){
