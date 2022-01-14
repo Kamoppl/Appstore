@@ -9,7 +9,7 @@ public class Player {
     public Integer employee;
     public Integer availableProject=0;
     public Integer daySpentOnLookingForEmployee = 0;
-    public AllProjects playerProject;
+
 
 
     public Player(String name, Integer money, Integer employee, Integer availableProject, Integer daySpentOnLookingForEmployee) {

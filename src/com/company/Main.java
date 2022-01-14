@@ -23,7 +23,7 @@ public class Main {
     public static int currentPlayer = 0;
     public Integer currentProject = 0;
     public PlayerOne playerOne;
-    public static ArrayList createdPlayers;
+    public static ArrayList<Player> createdPlayers;
 
     static final String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static SecureRandom rnd = new SecureRandom();
@@ -37,10 +37,11 @@ public class Main {
         AllProjects.add(generateMediumProject());
         AllProjects.add(generateHardProject());
         System.out.println(createdPlayers);
-        ArrayList a = new ArrayList((Collection) createdPlayers.get(0));
-        a.set(0,"a");
-        System.out.println(a.get(0)+"aaaaaaaaaaaaaaaaaaaaaaa");
 
+
+        changeMoney(currentPlayer, 100);
+        System.out.println("aaaaaaaaaaaaaaaaaaaaa");
+        changeEmployee(currentPlayer, 2);
 
         while (!end) {
             day();
@@ -145,6 +146,30 @@ public class Main {
 
     }
 
+    public static void changeMoney(Integer currentPlayer, Integer money) {
+        Player a = createdPlayers.get(currentPlayer);
+        a.money = a.money + money;
+        createdPlayers.set(currentPlayer, a);
+    }
+
+    public static void changeEmployee(Integer currentPlayer, Integer employee) {
+        Player a = createdPlayers.get(currentPlayer);
+        a.employee = a.employee + employee;
+        createdPlayers.set(currentPlayer, a);
+    }
+
+    public static void changeProject(Integer currentPlayer, Integer availableProject) {
+        Player a = createdPlayers.get(currentPlayer);
+        a.availableProject = a.availableProject + availableProject;
+        createdPlayers.set(currentPlayer, a);
+    }
+
+    public static void changeDaySpentOnLookingForEmployee(Integer currentPlayer, Integer daySpentOnLookingForEmployee) {
+        Player a = createdPlayers.get(currentPlayer);
+        a.daySpentOnLookingForEmployee = a.daySpentOnLookingForEmployee + daySpentOnLookingForEmployee;
+        createdPlayers.set(currentPlayer, a);
+    }
+
 
     public static void day() {
         while (!end) {
@@ -180,7 +205,7 @@ public class Main {
         }
     }
 
-    public static ArrayList createPlayers() {
+    public static ArrayList<Player> createPlayers() {
         Scanner in = new Scanner(System.in);
         Scanner scan = new Scanner(System.in);
         System.out.println("Ilu graczy weźmie udział w grze");
@@ -207,8 +232,8 @@ public class Main {
 
         for (int i = 1; i <= numberOfPlayers; i++) {
 
-            Player Player = new Player(playerList.get(i - 1), 1000, 0, 0, 0);
-            currentplayers.add(Player);
+            Player CreatedPlayer = new Player(playerList.get(i - 1), 1000, 0, 0, 0);
+            currentplayers.add(CreatedPlayer);
         }
         return currentplayers;
     }
@@ -280,7 +305,8 @@ public class Main {
                         }
 
                         case 3 -> {
-                            System.out.println("Projekt ciężki");                        }
+                            System.out.println("Projekt ciężki");
+                        }
 
                     }
                 } while (false);
