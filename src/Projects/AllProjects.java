@@ -13,7 +13,7 @@ public class AllProjects {
 
 
     public String toString() {
-        return "AllProjects{" +
+        return "\n"+"AllProjects{" +
                 "projectName='" + projectName + '\'' +
                 ", client='" + client + '\'' +
                 ", deadLine=" + deadLine +

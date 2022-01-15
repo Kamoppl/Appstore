@@ -11,6 +11,7 @@ public class MediumProject {
     public Integer penaltyCost = getRandomNumber(300, 500);
     public Integer income = getRandomNumber(1000, 2000);
     public Integer payDay = getRandomNumber(1, 2);
+    public boolean signed=false;
     static final String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static SecureRandom rnd = new SecureRandom();
 

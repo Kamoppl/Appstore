@@ -11,6 +11,7 @@ public class HardProject {
     public Integer penaltyCost=getRandomNumber(200,1000);
     public Integer income=getRandomNumber(2000,3000);
     public Integer payDay=getRandomNumber(1,2);
+    public boolean signed=false;
     static final String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static SecureRandom rnd = new SecureRandom();
 

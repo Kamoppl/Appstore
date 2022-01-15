@@ -1,7 +1,7 @@
 package Projects;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
+
 
 public class EasyProject {
     public String projectName = randomString(3);
@@ -10,8 +10,10 @@ public class EasyProject {
     public Integer penaltyCost = getRandomNumber(100, 400);
     public Integer income = getRandomNumber(400, 1000);
     public Integer payDay = getRandomNumber(0, 1);
+    public boolean signed=false;
     static final String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static SecureRandom rnd = new SecureRandom();
+
 
 
     String randomString(int len) {

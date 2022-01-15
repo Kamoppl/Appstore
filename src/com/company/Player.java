@@ -3,28 +3,29 @@ package com.company;
 import Projects.AllProjects;
 import Projects.Project;
 
+import java.util.ArrayList;
+
 public class Player {
     public String name;
     public Integer money = 1000;
     public Integer employee;
-    public Integer availableProject=0;
+    public Integer availbleProjectDays = 0;
     public Integer daySpentOnLookingForEmployee = 0;
+    public ArrayList project;
 
 
-
-    public Player(String name, Integer money, Integer employee, Integer availableProject, Integer daySpentOnLookingForEmployee) {
+    public Player(String name, Integer money, Integer employee, Integer availbleProjectDays, Integer daySpentOnLookingForEmployee) {
         this.name = name;
-        this.money = money=1000;
-        this.employee = employee=0;
-        this.availableProject = availableProject=0;
-        this.daySpentOnLookingForEmployee = daySpentOnLookingForEmployee=0;
+        this.money = money = 1000;
+        this.employee = employee = 0;
+        this.availbleProjectDays = Player.this.availbleProjectDays = 0;
+        this.daySpentOnLookingForEmployee = daySpentOnLookingForEmployee = 0;
     }
 
 
-
     public void signProject() {
-        if (availableProject > 0) {
-            showAvailableProjects();
+        if (availbleProjectDays > 0) {
+            showavailbleProjectDayss();
         } else {
             System.out.println("Nie ma dostępnych projektów");
         }
@@ -32,16 +33,31 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player{" +
-                "Imie='" + name + '\'' +
-                ", Hajs=" + money +
-                ", Prawcownicy=" + employee +
-                ", Ilość dostępnych projektów=" + availableProject +
-                '}';
+        if (project != null)
+            return
+
+                    "\n" + "Player{" +
+                            "name='" + name + '\'' +
+                            ", money=" + money +
+                            ", employee=" + employee +
+                            ", availbleProjectDays=" + availbleProjectDays +
+                            ", daySpentOnLookingForEmployee=" + daySpentOnLookingForEmployee +
+                            ", project=" + project +
+                            '}';
+        else {
+            return
+                    "\n" + "Player{" +
+                            "name='" + name + '\'' +
+                            ", money=" + money +
+                            ", employee=" + employee +
+                            ", availbleProjectDays=" + availbleProjectDays +
+                            ", daySpentOnLookingForEmployee=" + daySpentOnLookingForEmployee +
+                            '}';
+        }
     }
 
-    public void showAvailableProjects() {
-        System.out.println(availableProject);
+    public void showavailbleProjectDayss() {
+        System.out.println(availbleProjectDays);
     }
 
     public void getEmployee() {
