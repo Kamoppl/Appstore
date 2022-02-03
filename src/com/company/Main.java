@@ -1,6 +1,7 @@
 package com.company;
 
 import Projects.*;
+import org.w3c.dom.ls.LSOutput;
 
 import java.security.SecureRandom;
 import java.util.*;
@@ -15,16 +16,17 @@ public class Main {
     public static int mistake = 0;
     static List<String> playerList = new ArrayList<>(numberOfPlayers);
     List<Integer> playersList = new ArrayList<>();
-    public Project project;
+
     public static int currentPlayer = 0;
     public Integer currentProject = 0;
     public static ArrayList<Player> createdPlayers;
     static final String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static SecureRandom rnd = new SecureRandom();
     public static ArrayList<ArrayList> AllProjects = new ArrayList<>();
-
+    static com.company.Client Client = new Client();
 
     public static void main(String[] args) {
+        System.out.println(Client.toString());
         createdPlayers = createPlayers();                                         // Dodaj graczy
 
         showAllProjects();
@@ -127,12 +129,14 @@ public class Main {
 
                     case 8 -> System.out.println("You've chosen option #8");
 
-                    default -> {skip=true;}
+                    default -> {
+                        skip = true;
+                    }
                 }
 
             }
             while (false);
-            System.out.println("aaaaaaaaaaaaaaa");
+            System.out.println("coś nie działa");
 
         } catch (Exception IndexOutOfBoundsException) {
             System.out.println("Błąd wyboru z menu");
@@ -328,6 +332,7 @@ public class Main {
                     Scanner in = new Scanner(System.in);
                     int chosenProject = in.nextInt();
 
+                    //generuje projekty na początek gry
                     switch (chosenProject) {
 
                         case 1 -> {

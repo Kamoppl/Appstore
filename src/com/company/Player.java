@@ -1,8 +1,5 @@
 package com.company;
 
-import Projects.AllProjects;
-import Projects.Project;
-
 import java.util.ArrayList;
 
 public class Player {
