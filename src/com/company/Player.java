@@ -1,14 +1,11 @@
 package com.company;
 
 import Projects.Project;
-import org.w3c.dom.ls.LSOutput;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import static com.company.Main.*;
 
 public class Player {
     public static int day = 1;
@@ -18,6 +15,7 @@ public class Player {
     public Integer availbleProjectDays = 0;
     public Integer daySpentOnLookingForEmployee = 0;
     public ArrayList<Project> project = new ArrayList();
+    public static ArrayList<Worker> playerWorker = new ArrayList<>();
     public Project playerProject;
     public static int numberOfPlayers = 0;
     public static boolean end = false;
@@ -31,7 +29,9 @@ public class Player {
     static final String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static SecureRandom rnd = new SecureRandom();
     public static ArrayList<Project> AllProjects = new ArrayList<>();
-
+    public static Integer moneySpentOnLookingForEmployer;
+    public static ArrayList<Worker> allWorkers = new ArrayList<>();
+    public boolean doneCreatingWorkers = false;
 
     public Player(String name, Integer money, Integer employee, Integer availbleProjectDays, Integer daySpentOnLookingForEmployee) {
         this.name = name;
@@ -39,11 +39,11 @@ public class Player {
         this.employee = employee = 0;
         this.availbleProjectDays = Player.this.availbleProjectDays = 0;
         this.daySpentOnLookingForEmployee = daySpentOnLookingForEmployee = 0;
+        this.moneySpentOnLookingForEmployer = 0;
     }
 
     public void addProject(Project addProject) {
         this.project.add(addProject);
-        System.out.println(this.project + "daaaaaaaa");
     }
 
 
@@ -125,7 +125,10 @@ public class Player {
                     done = false;
                 }
             }
+
+
         } while (!done);
+
     }
 
     public static void menu() {
@@ -163,7 +166,7 @@ public class Player {
 
             // do something...
 
-            case 6 -> System.out.println("You've chosen option #6");
+            case 6 -> workersMenu();
 
 
             // do something...
@@ -402,5 +405,89 @@ public class Player {
     public static void waitClick() {
         catchString();
     }
+
+    public Integer checkPlayerWorkersTester() {
+        Integer playerWorkersTesters = 0;
+        for (int i = 0; i < playerWorker.size(); i++) {
+            if (this.playerWorker.get(i).tester == 1) {
+                playerWorkersTesters++;
+            }
+        }
+        return playerWorkersTesters;
+    }
+
+    public Integer checkPlayerWorkersSeller() {
+        Integer playerWorkersSeller = 0;
+        for (int i = 0; i < playerWorker.size(); i++) {
+            if (this.playerWorker.get(i).seller == 1) {
+                playerWorkersSeller++;
+            }
+        }
+        return playerWorkersSeller;
+    }
+
+    public static void addWorkerToPlayer(Integer workerIndex) {
+        playerWorker.add(allWorkers.get(workerIndex));
+    }
+
+    public boolean createWorkers(Boolean doneCreatingWorkers) {
+        if (doneCreatingWorkers = false) {
+            //programisci
+            Worker Kamil = new Worker(2000, 25, 40, 30, 20, 0, 30, 0, 0);
+            allWorkers.add(Kamil);
+            Worker Adam = new Worker(1800, 15, 10, 40, 10, 10, 10, 0, 0);
+            allWorkers.add(Adam);
+            Worker Maciej = new Worker(3000, 40, 40, 10, 30, 35, 30, 0, 0);
+            allWorkers.add(Maciej);
+            Worker Borek = new Worker(2200, 30, 20, 10, 15, 40, 40, 0, 0);
+            allWorkers.add(Borek);
+            Worker Michał = new Worker(1500, 10, 30, 15, 40, 0, 0, 0, 0);
+            allWorkers.add(Michał);
+            Worker Marcin = new Worker(1600, 15, 10, 20, 20, 20, 25, 0, 0);
+            allWorkers.add(Marcin);
+            //tester
+            Worker Anna = new Worker(1500, 0, 0, 0, 0, 0, 0, 1, 0);
+            allWorkers.add(Anna);
+            //sprzedawca
+            Worker Mateusz = new Worker(1000, 0, 0, 0, 0, 0, 0, 0, 1);
+            allWorkers.add(Mateusz);
+            doneCreatingWorkers = true;
+        }
+        return doneCreatingWorkers;
+    }
+
+    public static void workersMenu() {
+        System.out.println("Menu Pracowników");
+        System.out.println("1 Wyświetl pracowników");
+        System.out.println("2 Zatrudnij Pracownika");
+        Integer chosenNumber = catchNumber(1, 3);
+        System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+        showAllWorkers();
+        do {
+
+            switch (chosenNumber) {
+                case 1:  showAllWorkers();
+                    break;
+                case 2: addWorkerToPlayer(chosenNumber=catchNumber(1,allWorkers.size()));
+
+
+            }
+        }
+        while (chosenNumber != 0);
+    }
+    public static void showAllWorkers(){
+        for (int i=0;i<allWorkers.size();i++){
+            System.out.println(allWorkers.get(i));
+        }
+    }
+    public static void hireWorker(){
+        System.out.println("0 Wraca do Menu");
+        showAllWorkers();
+        Integer chosenNumber=catchNumber(0,allWorkers.size());
+        if (chosenNumber!=0){
+        addWorkerToPlayer(chosenNumber=catchNumber(1,allWorkers.size()));}
+
+    }
 }
+
 

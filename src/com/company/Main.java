@@ -1,17 +1,14 @@
 package com.company;
 
-import Projects.*;
-
-import java.security.SecureRandom;
-import java.util.*;
-
 import static com.company.Player.*;
+import static com.company.Worker.*;
 
 public class Main {
 
 
     public static void main(String[] args) {
         // Dodaj graczy
+
         createdPlayers = createPlayers();
 
         for (int a = 0; a < createdPlayers.size(); a++) {
