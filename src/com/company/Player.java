@@ -7,12 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+
 public class Player {
     public static int day = 1;
     public String name;
     public Integer money = 1000;
     public Integer employee;
-    public Integer availbleProjectDays = 0;
+    public Integer availableProjectDays = 0;
     public Integer daySpentOnLookingForEmployee = 0;
     public ArrayList<Project> project = new ArrayList();
     public static ArrayList<Worker> playerWorker = new ArrayList<>();
@@ -28,16 +29,16 @@ public class Player {
     public static ArrayList<Player> createdPlayers;
     static final String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static SecureRandom rnd = new SecureRandom();
-    public static ArrayList<Project> AllProjects = new ArrayList<>();
-    public static Integer moneySpentOnLookingForEmployer;
+    public static ArrayList<Project> allProjects = new ArrayList<>();
     public static ArrayList<Worker> allWorkers = new ArrayList<>();
+    public static Integer moneySpentOnLookingForEmployer;
     public boolean doneCreatingWorkers = false;
 
-    public Player(String name, Integer money, Integer employee, Integer availbleProjectDays, Integer daySpentOnLookingForEmployee) {
+    public Player(String name, Integer money, Integer employee, Integer availableProjectDays, Integer daySpentOnLookingForEmployee) {
         this.name = name;
         this.money = money = 1000;
         this.employee = employee = 0;
-        this.availbleProjectDays = Player.this.availbleProjectDays = 0;
+        this.availableProjectDays = Player.this.availableProjectDays = 0;
         this.daySpentOnLookingForEmployee = daySpentOnLookingForEmployee = 0;
         this.moneySpentOnLookingForEmployer = 0;
     }
@@ -55,7 +56,7 @@ public class Player {
                             "name='" + name + '\'' +
                             ", money=" + money +
                             ", employee=" + employee +
-                            ", availbleProjectDays=" + availbleProjectDays +
+                            ", availbleProjectDays=" + availableProjectDays +
                             ", daySpentOnLookingForEmployee=" + daySpentOnLookingForEmployee +
                             ", project=" + project +
                             '}';
@@ -65,7 +66,7 @@ public class Player {
                             "name='" + name + '\'' +
                             ", money=" + money +
                             ", employee=" + employee +
-                            ", availbleProjectDays=" + availbleProjectDays +
+                            ", availbleProjectDays=" + availableProjectDays +
                             ", daySpentOnLookingForEmployee=" + daySpentOnLookingForEmployee +
                             '}';
         }
@@ -152,7 +153,7 @@ public class Player {
 
             case 3 -> {
 
-                System.out.println(createdPlayers.get(currentPlayer).availbleProjectDays);
+                System.out.println(createdPlayers.get(currentPlayer).availableProjectDays);
             }
             // do something...
 
@@ -201,7 +202,7 @@ public class Player {
 
     public static void changeProject(Integer currentPlayer, Integer availbleProjectDays) {
         Player a = createdPlayers.get(currentPlayer);
-        a.availbleProjectDays = a.availbleProjectDays + availbleProjectDays;
+        a.availableProjectDays = a.availableProjectDays + availbleProjectDays;
         createdPlayers.set(currentPlayer, a);
     }
 
@@ -214,7 +215,7 @@ public class Player {
 
     //gra się toczy
     public static void game() {
-
+        addBasicWorkers();
         while (!end) {
 
             currentPlayer = 0;
@@ -318,6 +319,7 @@ public class Player {
             currentplayers.add(CreatedPlayer);
         }
         return currentplayers;
+
     }
 
     //Tworzy projekty
@@ -336,31 +338,31 @@ public class Player {
 
     public static void getClient() {
         System.out.println("Chcesz szukać klienta?");
-        if (createdPlayers.get(currentPlayer).availbleProjectDays == 5) {
+        if (createdPlayers.get(currentPlayer).availableProjectDays == 5) {
             Integer RNG = getRandomNumber(1, 3);
             if (RNG == 1) {
 
-                AllProjects.add(new Project("Easy"));
+                allProjects.add(new Project("Easy"));
             }
             if (RNG == 2) {
 
-                AllProjects.add(new Project("Medium"));
+                allProjects.add(new Project("Medium"));
             }
             if (RNG == 3) {
 
-                AllProjects.add(new Project("Hard"));
+                allProjects.add(new Project("Hard"));
             }
             System.out.println("Czy któryś projekt cię interesuje i chcesz zdobyć klienta?" + "\n" + "Jeśli nie naciśnij 0");
             showAllPlayerProjects();
-            Integer chosenNumber = catchNumber(0, AllProjects.size());
+            Integer chosenNumber = catchNumber(0, allProjects.size());
             if (chosenNumber != 0) {
-                createdPlayers.get(currentPlayer).project.add(AllProjects.get(chosenNumber - 1));
-                AllProjects.remove(chosenNumber - 1);
+                createdPlayers.get(currentPlayer).project.add(allProjects.get(chosenNumber - 1));
+                allProjects.remove(chosenNumber - 1);
             }
 
-            createdPlayers.get(currentPlayer).availbleProjectDays = 0;
+            createdPlayers.get(currentPlayer).availableProjectDays = 0;
         } else {
-            createdPlayers.get(currentPlayer).availbleProjectDays += 1;
+            createdPlayers.get(currentPlayer).availableProjectDays += 1;
         }
 
     }
@@ -396,9 +398,9 @@ public class Player {
     }
 
     public static void showAllPlayerProjects() {
-        for (int i = 0; i < AllProjects.size(); i++) {
+        for (int i = 0; i < allProjects.size(); i++) {
             Integer projectnumber = i + 1;
-            System.out.println("Projekt " + projectnumber + "    " + AllProjects.get(i));
+            System.out.println("Projekt " + projectnumber + "    " + allProjects.get(i));
         }
     }
 
@@ -430,62 +432,75 @@ public class Player {
         playerWorker.add(allWorkers.get(workerIndex));
     }
 
-    public boolean createWorkers(Boolean doneCreatingWorkers) {
-        if (doneCreatingWorkers = false) {
-            //programisci
-            Worker Kamil = new Worker(2000, 25, 40, 30, 20, 0, 30, 0, 0);
-            allWorkers.add(Kamil);
-            Worker Adam = new Worker(1800, 15, 10, 40, 10, 10, 10, 0, 0);
-            allWorkers.add(Adam);
-            Worker Maciej = new Worker(3000, 40, 40, 10, 30, 35, 30, 0, 0);
-            allWorkers.add(Maciej);
-            Worker Borek = new Worker(2200, 30, 20, 10, 15, 40, 40, 0, 0);
-            allWorkers.add(Borek);
-            Worker Michał = new Worker(1500, 10, 30, 15, 40, 0, 0, 0, 0);
-            allWorkers.add(Michał);
-            Worker Marcin = new Worker(1600, 15, 10, 20, 20, 20, 25, 0, 0);
-            allWorkers.add(Marcin);
-            //tester
-            Worker Anna = new Worker(1500, 0, 0, 0, 0, 0, 0, 1, 0);
-            allWorkers.add(Anna);
-            //sprzedawca
-            Worker Mateusz = new Worker(1000, 0, 0, 0, 0, 0, 0, 0, 1);
-            allWorkers.add(Mateusz);
-            doneCreatingWorkers = true;
-        }
-        return doneCreatingWorkers;
-    }
 
     public static void workersMenu() {
         System.out.println("Menu Pracowników");
         System.out.println("1 Wyświetl pracowników");
         System.out.println("2 Zatrudnij Pracownika");
-        Integer chosenNumber = catchNumber(1, 3);
-        System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-        showAllWorkers();
+
+        Integer chosenNumber;
         do {
+            chosenNumber = catchNumber(1, 3);
 
             switch (chosenNumber) {
-                case 1:  showAllWorkers();
+                case 1: {
+                    showAllWorkers();
                     break;
-                case 2: addWorkerToPlayer(chosenNumber=catchNumber(1,allWorkers.size()));
+                }
+                case 2: {
+                    hireWorker();
+                    break;
+                }
 
 
             }
+
         }
         while (chosenNumber != 0);
+
     }
-    public static void showAllWorkers(){
-        for (int i=0;i<allWorkers.size();i++){
-            System.out.println(allWorkers.get(i));
+
+    public static void showAllWorkers() {
+        for (int i = 0; i < allWorkers.size(); i++) {
+            int workerNumber = i + 1;
+            System.out.println(workerNumber + "    " + allWorkers.get(i));
         }
     }
-    public static void hireWorker(){
+
+    public static void showPlayerWorkers() {
+        for (int i = 0; i < allWorkers.size(); i++) {
+            int workerNumber = i + 1;
+            System.out.println(workerNumber + "    " + playerWorker.get(i));
+        }
+    }
+
+    public static void hireWorker() {
         System.out.println("0 Wraca do Menu");
         showAllWorkers();
-        Integer chosenNumber=catchNumber(0,allWorkers.size());
-        if (chosenNumber!=0){
-        addWorkerToPlayer(chosenNumber=catchNumber(1,allWorkers.size()));}
+        Integer chosenNumber = catchNumber(0, allWorkers.size());
+        if (chosenNumber != 0) {
+            addWorkerToPlayer(chosenNumber = catchNumber(1, allWorkers.size()) + 1);
+            System.out.println(playerWorker.toString());
+        }
+
+
+    }
+
+    public static void addBasicWorkers() {
+        Worker Kamil = new Worker("Kamil");
+        Worker Adam = new Worker("Adam");
+        Worker Maciej = new Worker("Maciej");
+        Worker Borek = new Worker("Borek");
+        Worker Michał = new Worker("Michał");
+        Worker Marcin = new Worker("Marcin");
+        Worker Mateusz = new Worker("Mateusz");
+        allWorkers.add(Kamil);
+        allWorkers.add(Adam);
+        allWorkers.add(Maciej);
+        allWorkers.add(Borek);
+        allWorkers.add(Michał);
+        allWorkers.add(Marcin);
+        allWorkers.add(Mateusz);
 
     }
 }
