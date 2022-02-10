@@ -1,9 +1,13 @@
 package Projects;
+import com.company.Client;
+
 import java.security.SecureRandom;
+
 public class Project {
 
     public String projectName;
     public String client;
+    public Client clientBehaviour;
     public Integer deadLine;
     public Integer penaltyCost;
     public Integer income;
@@ -21,6 +25,7 @@ public class Project {
         if (projectLevel.equals( "Easy")) {
             this.projectName = randomString(3);
             this.client = randomString(1);
+            this.clientBehaviour= new Client();
             this.deadLine = getRandomNumber(6, 10);
             this.penaltyCost = getRandomNumber(100, 400);
             this.income = getRandomNumber(400, 1000);
@@ -31,6 +36,7 @@ public class Project {
         if (projectLevel.equals( "Medium")) {
             this.projectName = randomString(5);
             this.client = client = randomString(3);
+            this.clientBehaviour= new Client();
             this.deadLine = getRandomNumber(4, 6);
             this.penaltyCost = getRandomNumber(300, 500);
             this.income = getRandomNumber(1000, 2000);
@@ -40,6 +46,7 @@ public class Project {
         if (projectLevel.equals( "Hard")) {
             this.projectName = randomString(7);
             this.client = randomString(5);
+            this.clientBehaviour= new Client();
             this.deadLine = getRandomNumber(3, 5);
             this.penaltyCost = getRandomNumber(200, 1000);
             this.income = getRandomNumber(2000, 3000);
@@ -50,9 +57,12 @@ public class Project {
             this.projectName = randomString(1);
             this.client = randomString(1);
             this.deadLine = getRandomNumber(1,1);
+            this.clientBehaviour= new Client();
             this.penaltyCost = getRandomNumber(200, 1000);
             this.income = getRandomNumber(2000, 3000);
             this.payDay = getRandomNumber(1, 2);
+            this.signed=true;
+            this.tested=false;
             this.Progress= new ProjectProgress("Ended");
         }
     }
@@ -69,6 +79,7 @@ public class Project {
         return "Project{" +
                 "projectName='" + projectName + '\'' +
                 ", client='" + client + '\'' +
+                ", clientBehaviour='" + clientBehaviour + '\'' +
                 ", deadLine=" + deadLine +
                 ", penaltyCost=" + penaltyCost +
                 ", income=" + income +

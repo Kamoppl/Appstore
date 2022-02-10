@@ -19,15 +19,15 @@ public class ProjectProgress {
 
     public ProjectProgress(String level) {
         if (level.equals("Easy")) {
-            randomDeleteParametrs(getRandomNumber(2, 3));
+            randomDeleteParametrs(getRandomNumber(1, 1));
 
         }
         if (level.equals("Medium")) {
-            randomDeleteParametrs(getRandomNumber(3, 4));
+            randomDeleteParametrs(getRandomNumber(2, 3));
 
         }
         if (level.equals("Hard")) {
-            randomDeleteParametrs(getRandomNumber(4, 5));
+            randomDeleteParametrs(getRandomNumber(3, 4));
 
         }
         if (level.equals("Ended")) {

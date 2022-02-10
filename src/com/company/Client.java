@@ -9,25 +9,25 @@ public class Client {
     }
 
     public Client() {
-        this.ClientType = ClientTypeGet();
-    }
-
-    public String toString() {
-        return  ClientType ;
-    }
-//tworzy losowego klienta
-    static String ClientTypeGet() {
         int a = getRandomNumber(1, 9);
         String Name = null;
         if (a < 4) {
-            Name = "Wyluzowany";
+            this.ClientType  = "Wyluzowany";
         }
         if (a > 3 && a < 7) {
-            Name = "Wymagający";
+            this.ClientType  = "Wymagający";
         }
         if (a > 6 && a < 10) {
-            Name = "Skurwiel";
+            this.ClientType  = "Skurwiel";
         }
-        return Name;
+
+    }
+
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "ClientType='" + ClientType + '\'' +
+                '}';
     }
 }

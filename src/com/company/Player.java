@@ -32,6 +32,7 @@ public class Player {
     public static ArrayList<Project> allProjects = new ArrayList<>();
     public static ArrayList<Worker> allWorkers = new ArrayList<>();
     public static ArrayList<Worker> justPlayer = new ArrayList<>();
+    public static ArrayList<PaymentDelay> moneyDelay = new ArrayList<>();
     public static Integer moneySpentOnLookingForEmployer;
     public boolean doneCreatingWorkers = false;
 
@@ -120,7 +121,7 @@ public class Player {
                 waitClick();
             }
             case 5 -> {
-                System.out.println("a");
+                giveClientProject();
                 waitClick();
             }
             case 6 -> {
@@ -313,14 +314,14 @@ public class Player {
             sure = false;
             for (int i = 0; i < createdPlayers.get(currentPlayer).project.size(); i++) {
                 Integer projectNumber = i + 1;
-                System.out.println("Nr Projektu to " + projectNumber + "    " + createdPlayers.get(currentPlayer).project);
+                System.out.println("Nr Projektu to " + projectNumber + "    " + createdPlayers.get(currentPlayer).project.get(i));
             }
             Integer chosenNumber = catchNumber(0, createdPlayers.get(currentPlayer).project.size());
             if (chosenNumber == 0) {
                 break;
             }
             chosenNumber -= 1;
-            if (createdPlayers.get(currentPlayer).project.get(chosenNumber).signed == false) {
+            if (!createdPlayers.get(currentPlayer).project.get(chosenNumber).signed) {
                 System.out.println("Potwierdź (y/n)");
                 String confirm = catchString();
                 if (confirm.equals("y")) {
@@ -328,7 +329,7 @@ public class Player {
                     createdPlayers.get(currentPlayer).project.get(chosenNumber).signProject();
                     System.out.println(createdPlayers.get(currentPlayer).project.get(chosenNumber));
                 }
-            } else if (createdPlayers.get(currentPlayer).project.get(chosenNumber).signed == true) {
+            } else if (createdPlayers.get(currentPlayer).project.get(chosenNumber).signed) {
                 System.out.println("Podpisano już ten kontrakt");
                 skip = true;
                 sure = true;
@@ -652,7 +653,123 @@ public class Player {
 
     }
 
+    public static boolean fortuneWheel(Integer chance) {
+        Integer fortune = getRandomNumber(0, 100);
+        if (fortune <= chance) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean checkIfProjectIsCompleted(Integer chosenNumber) {
+        if (
+                createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.frontend == 100
+                        && createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.backend == 100
+                        && createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.bazaDanych == 100
+                        && createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.mobile == 100
+                        && createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.wordpress == 100
+                        && createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.prestashop == 100
+                        && createdPlayers.get(currentPlayer).project.get(chosenNumber).signed
+
+        ) {
+            System.out.println("Twój projekt jest skończony");
+            return true;
+        }
+        System.out.println("Twój projekt jest jeszcze nie skończony");
+        return false;
+    }
+
+    private static boolean checkIfProjectWorks(Integer chosenNumber) {
+        if (createdPlayers.get(currentPlayer).project.get(chosenNumber).tested) {
+            return true;
+        }
+        if (getRandomNumber(0, 1) == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static void giveClientProject() {
+        System.out.println("0 Wracasz do Menu");
+        System.out.println("Wybierz projekt do oddania");
+        showPlayerProjects();
+        Integer chosenNumber = catchNumber(0, createdPlayers.get(currentPlayer).project.size());
+        if (chosenNumber == 0) {
+            skip = true;
+        }
+        if (chosenNumber != 0) {
+
+            chosenNumber -= 1;
+            if (checkIfProjectIsCompleted(chosenNumber)) {
+                System.out.println("Czy na pewno chcesz oddać projekt? (y/n)");
+                String input = catchString();
+                if (input.equals("y")) {
+                    System.out.println(createdPlayers.get(currentPlayer).project.get(chosenNumber).clientBehaviour.toString()+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+                    if (createdPlayers.get(currentPlayer).project.get(chosenNumber).clientBehaviour.equals("Wyluzowany")) {
+
+
+                        if (fortuneWheel(30)) {
+                            moneyDelay.add(new PaymentDelay(createdPlayers.get(currentPlayer).project.get(chosenNumber).income, 7));
+                        } else {
+                            createdPlayers.get(currentPlayer).money += createdPlayers.get(currentPlayer).project.get(chosenNumber).income;
+                        }
+
+
+                    }
+
+
+                    if (createdPlayers.get(currentPlayer).project.get(chosenNumber).clientBehaviour.equals("Wymagający")) {
+                        if (checkIfProjectWorks(chosenNumber)) {
+                            System.out.println("Projekt nie miał błędów i został oddany");
+                            createdPlayers.get(currentPlayer).money += createdPlayers.get(currentPlayer).project.get(chosenNumber).income;
+                            createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+
+
+                        } else {
+                            if (fortuneWheel(50)) {
+                                System.out.println("Projekt miał błąd ale klient nie zauważył");
+                                createdPlayers.get(currentPlayer).money += createdPlayers.get(currentPlayer).project.get(chosenNumber).income;
+                                createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                            } else {
+                                System.out.println("Projekt przepadł na zawsze, miał błędy, 0 incomu, unlucki");
+                                createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                            }
+                        }
+
+                    }
+                    if (createdPlayers.get(currentPlayer).project.get(chosenNumber).clientBehaviour.equals("Skurwiel")) {
+                        if (checkIfProjectWorks(chosenNumber)) {
+                            if (fortuneWheel(30)) {
+                                System.out.println("Skurwiel da pieniądze za tydzień");
+                                moneyDelay.add(new PaymentDelay(createdPlayers.get(currentPlayer).project.get(chosenNumber).income, 7));
+                                createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                            } else if (fortuneWheel(5)) {
+                                System.out.println("Skurwiel da pieniądze za miesiąc");
+                                moneyDelay.add(new PaymentDelay(createdPlayers.get(currentPlayer).project.get(chosenNumber).income, 30));
+                                createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                            } else if (fortuneWheel(1)) {
+                                createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+
+                            } else {
+                                System.out.println("Wszystko OK klient zapłacił");
+                                createdPlayers.get(currentPlayer).money += createdPlayers.get(currentPlayer).project.get(chosenNumber).income;
+                                createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                            }
+                        } else {
+                            System.out.println("Twój projek miał błąd, a klient nie godzi się na błędy i mówi papa");
+                            createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                        }
+                    }
+                }
+
+            }
+        }
+        createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+
+
+    }
+
 
 }
-
-

@@ -52,8 +52,8 @@ public class Worker {
             this.backend = 20;
             this.bazaDanych = 10;
             this.mobile = 0;
-            this.prestashop = 0;
-            this.wordpress = 0;
+            this.prestashop = 20;
+            this.wordpress = 20;
         }
         if (workerName.equals("Kamil")) {
             this.jobPostion = "Programista";
