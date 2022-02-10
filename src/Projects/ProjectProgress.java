@@ -1,5 +1,9 @@
 package Projects;
 
+
+import java.util.ArrayList;
+import java.util.Random;
+
 import static com.company.Player.getRandomNumber;
 
 public class ProjectProgress {
@@ -10,122 +14,80 @@ public class ProjectProgress {
     public Integer wordpress = 100;
     public Integer prestashop = 100;
 
-    public ProjectProgress(String poziom) {
 
-        if (poziom.equals("Easy")) {
-            int RNG;
-            int max = getRandomNumber(1, 2);
-            while (max < 3) {
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.frontend != 0) {
-                    this.frontend = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.backend != 0) {
-                    this.backend = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.bazaDanych != 0) {
-                    this.bazaDanych = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.mobile != 0) {
-                    this.mobile = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.wordpress != 0) {
-                    this.wordpress = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.prestashop != 0) {
-                    this.prestashop = 0;
-                    max++;
+    public Integer[] properties = {this.frontend, this.backend, this.bazaDanych, this.mobile, this.wordpress, this.prestashop};
 
-                }
-            }
+    public ProjectProgress(String level) {
+        if (level.equals("Easy")) {
+            randomDeleteParametrs(getRandomNumber(2, 3));
+
         }
-        if (poziom.equals("Medium")) {
-            int RNG;
-            int max = getRandomNumber(2, 3);
-            while (max < 6) {
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.frontend != 0) {
-                    this.frontend = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.backend != 0) {
-                    this.backend = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.bazaDanych != 0) {
-                    this.bazaDanych = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.mobile != 0) {
-                    this.mobile = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.wordpress != 0) {
-                    this.wordpress = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.prestashop != 0) {
-                    this.prestashop = 0;
-                    max++;
+        if (level.equals("Medium")) {
+            randomDeleteParametrs(getRandomNumber(3, 4));
 
-                }
-            }
         }
+        if (level.equals("Hard")) {
+            randomDeleteParametrs(getRandomNumber(4, 5));
 
-
-        if (poziom.equals("Hard")) {
-            int RNG;
-            int max = getRandomNumber(3, 4);
-            while (max < 5) {
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.frontend != 0) {
-                    this.frontend = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.backend != 0) {
-                    this.backend = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.bazaDanych != 0) {
-                    this.bazaDanych = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.mobile != 0) {
-                    this.mobile = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.wordpress != 0) {
-                    this.wordpress = 0;
-                    max++;
-                }
-                RNG = getRandomNumber(0, 1);
-                if (RNG == 1 && this.prestashop != 0) {
-                    this.prestashop = 0;
-                    max++;
-
-                }
-            }
+        }
+        if (level.equals("Ended")) {
+            this.frontend = 100;
+            this.backend = 100;
+            this.bazaDanych = 100;
+            this.mobile = 100;
+            this.wordpress = 100;
+            this.prestashop = 100;
         }
     }
+
+    public void randomDeleteParametrs(Integer counter) {
+
+
+        ArrayList<Integer> numbers = new ArrayList<Integer>();
+        Random randomGenerator = new Random();
+        //ilość generowanego inta
+        while (numbers.size() < counter) {
+            // zakres inta
+            int RNG = randomGenerator.nextInt(6);
+            if (!numbers.contains(RNG)) {
+                numbers.add(RNG);
+
+                properties[RNG] = 0;
+
+                if (this.frontend != 0) {
+                    this.frontend = properties[0];
+                }
+
+                if (this.backend != 0) {
+                    this.backend = properties[1];
+                }
+
+                if (this.bazaDanych != 0) {
+                    this.bazaDanych = properties[2];
+                }
+
+
+                if (this.mobile != 0) {
+                    this.mobile = properties[3];
+                }
+
+
+                if (this.wordpress != 0) {
+                    this.wordpress = properties[4];
+                }
+
+
+                if (this.prestashop != 0) {
+                    this.prestashop = properties[5];
+                }
+
+            }
+
+        }
+
+
+    }
+
 
     public void increaseFrontEndComplete(Integer frontIncrease) {
         this.frontend += frontIncrease;
@@ -149,5 +111,17 @@ public class ProjectProgress {
 
     public void increasePrestaShopComplete(Integer prestaShopIncrease) {
         this.frontend += prestaShopIncrease;
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectProgress{" +
+                "frontend=" + frontend +
+                ", backend=" + backend +
+                ", bazaDanych=" + bazaDanych +
+                ", mobile=" + mobile +
+                ", wordpress=" + wordpress +
+                ", prestashop=" + prestashop +
+                '}';
     }
 }

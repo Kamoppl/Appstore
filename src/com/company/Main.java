@@ -1,13 +1,13 @@
 package com.company;
 
 import static com.company.Player.*;
-import static com.company.Worker.*;
 
 public class Main {
 
 
     public static void main(String[] args) {
         // Dodaj graczy
+
 
         createdPlayers = createPlayers();
 
@@ -21,7 +21,6 @@ public class Main {
             game();
         }
     }
-
 
 
 }

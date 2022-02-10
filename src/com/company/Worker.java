@@ -1,8 +1,6 @@
 package com.company;
 
 
-import java.util.ArrayList;
-
 public class Worker {
     Integer cost;
     public String jobPostion;
@@ -12,8 +10,8 @@ public class Worker {
     public Integer mobile = 0;
     public Integer wordpress = 0;
     public Integer prestashop = 0;
-    public Integer tester;
-    public Integer seller;
+    public Integer tester = 0;
+    public Integer seller = 0;
 
 
     public Worker(Integer cost, Integer frontend, Integer backend, Integer bazaDanych, Integer mobile, Integer wordpress, Integer prestashop, Integer tester, Integer selller) {
@@ -47,6 +45,16 @@ public class Worker {
     }*/
 
     public Worker(String workerName) {
+        if (workerName.equals("Player")) {
+            this.jobPostion = "Gracz";
+            this.cost = 0;
+            this.frontend = 30;
+            this.backend = 20;
+            this.bazaDanych = 10;
+            this.mobile = 0;
+            this.prestashop = 0;
+            this.wordpress = 0;
+        }
         if (workerName.equals("Kamil")) {
             this.jobPostion = "Programista";
             this.cost = 2000;

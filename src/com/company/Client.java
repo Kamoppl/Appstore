@@ -1,7 +1,4 @@
 package com.company;
-
-import java.security.SecureRandom;
-
 public class Client {
     String ClientType;
 

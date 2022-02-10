@@ -31,6 +31,7 @@ public class Player {
     static SecureRandom rnd = new SecureRandom();
     public static ArrayList<Project> allProjects = new ArrayList<>();
     public static ArrayList<Worker> allWorkers = new ArrayList<>();
+    public static ArrayList<Worker> justPlayer = new ArrayList<>();
     public static Integer moneySpentOnLookingForEmployer;
     public boolean doneCreatingWorkers = false;
 
@@ -85,52 +86,6 @@ public class Player {
 
     }
 
-    public void choseStartingProject() {
-
-
-        System.out.println("Do wyboru masz 3 projekty");
-        System.out.println("Wybierz projekty pod względem trudności ");
-        System.out.println("Projekt wybiera  ===> " + this.name);
-        System.out.println("1. Ławty ");
-        System.out.println("2. Średni ");
-        System.out.println("3. Ciężki ");
-        boolean done = false;
-        do {
-            int chosenNumber = catchNumber(1, 3);
-            //generuje projekty na początek gry
-            switch (chosenNumber) {
-
-                case 1 -> {
-                    System.out.println("Projekt łatwy");
-                    this.addProject(generateEasyProject());
-                    done = true;
-
-
-                }
-                case 2 -> {
-                    System.out.println("Projekt średni");
-                    this.addProject(generateMediumProject());
-                    done = true;
-
-
-                }
-
-                case 3 -> {
-                    System.out.println("Projekt ćiężki");
-                    this.addProject(generateHardProject());
-                    done = true;
-
-                }
-                default -> {
-                    System.out.println("Zły wybór.");
-                    done = false;
-                }
-            }
-
-
-        } while (!done);
-
-    }
 
     public static void menu() {
 
@@ -145,40 +100,45 @@ public class Player {
         System.out.println("6.Zatrudnić nowego pracownika");
         System.out.println("7.Zwolnić pracownika");
         System.out.println("8.Przeznaczyć dzień na rozliczenia z urzędami (jeśli nie poświęcisz na to 2 dni w miesiącu ZUS wjeżdża z taką kontrolą, że zamykasz firmę z długami)");
-        Integer chosenNumber = catchNumber(1, 9);
+        Integer chosenNumber = catchNumber(1, 10);
 
         switch (chosenNumber) {
-            case 1 -> signContract();
-            case 2 -> getClient();
-
-            case 3 -> {
-
-                System.out.println(createdPlayers.get(currentPlayer).availableProjectDays);
+            case 1 -> {
+                signContract();
+                waitClick();
             }
-            // do something...
-
-            case 4 -> showAllPlayerProjects();
-
-
-            // do something...
-
-            case 5 -> System.out.println("You've chosen option #5");
-
-
-            // do something...
-
-            case 6 -> workersMenu();
-
-
-            // do something...
-
-            case 7 -> System.out.println("You've chosen option #7");
-
-
-            // do something...
-
-            case 8 -> System.out.println("You've chosen option #8");
-            case 9 -> showPlayerProjects();
+            case 2 -> {
+                getClient();
+                waitClick();
+            }
+            case 3 -> {
+                playerDoHisJob();
+                waitClick();
+            }
+            case 4 -> {
+                testProject();
+                waitClick();
+            }
+            case 5 -> {
+                System.out.println("a");
+                waitClick();
+            }
+            case 6 -> {
+                workersMenu();
+                waitClick();
+            }
+            case 7 -> {
+                fireWorker();
+                waitClick();
+            }
+            case 8 -> {
+                System.out.println("You've chosen option #8");
+                waitClick();
+            }
+            case 9 -> {
+                showPlayerProjects();
+            }
+            case 10 -> createdPlayers.get(currentPlayer).project.add(generateEndedProject());
 
             default -> {
                 skip = true;
@@ -186,32 +146,6 @@ public class Player {
         }
 
     }
-
-
-    public static void changeMoney(Integer currentPlayer, Integer money) {
-        Player a = createdPlayers.get(currentPlayer);
-        a.money = a.money + money;
-        createdPlayers.set(currentPlayer, a);
-    }
-
-    public static void changeEmployee(Integer currentPlayer, Integer employee) {
-        Player a = createdPlayers.get(currentPlayer);
-        a.employee = a.employee + employee;
-        createdPlayers.set(currentPlayer, a);
-    }
-
-    public static void changeProject(Integer currentPlayer, Integer availbleProjectDays) {
-        Player a = createdPlayers.get(currentPlayer);
-        a.availableProjectDays = a.availableProjectDays + availbleProjectDays;
-        createdPlayers.set(currentPlayer, a);
-    }
-
-    public static void changeDaySpentOnLookingForEmployee(Integer currentPlayer, Integer daySpentOnLookingForEmployee) {
-        Player a = createdPlayers.get(currentPlayer);
-        a.daySpentOnLookingForEmployee = a.daySpentOnLookingForEmployee + daySpentOnLookingForEmployee;
-        createdPlayers.set(currentPlayer, a);
-    }
-
 
     //gra się toczy
     public static void game() {
@@ -335,6 +269,9 @@ public class Player {
         return new Project("Hard");
     }
 
+    public static Project generateEndedProject() {
+        return new Project("Ended");
+    }
 
     public static void getClient() {
         System.out.println("Chcesz szukać klienta?");
@@ -371,20 +308,31 @@ public class Player {
         System.out.println("Podpisanie umowy na dostępny projekt");
         System.out.println("Który projekt chcesz podpisać");
 
-        boolean sure = false;
+        boolean sure;
         do {
             sure = false;
             for (int i = 0; i < createdPlayers.get(currentPlayer).project.size(); i++) {
-                System.out.println("Nr Projektu to " + i + 1 + "    " + createdPlayers.get(currentPlayer).project);
+                Integer projectNumber = i + 1;
+                System.out.println("Nr Projektu to " + projectNumber + "    " + createdPlayers.get(currentPlayer).project);
             }
-            Integer chosenNumber = catchNumber(1, createdPlayers.get(currentPlayer).project.size());
+            Integer chosenNumber = catchNumber(0, createdPlayers.get(currentPlayer).project.size());
+            if (chosenNumber == 0) {
+                break;
+            }
             chosenNumber -= 1;
-            System.out.println("Potwierdź (y/n)");
-            String confirm = catchString();
-            if (confirm.equals("y")) {
+            if (createdPlayers.get(currentPlayer).project.get(chosenNumber).signed == false) {
+                System.out.println("Potwierdź (y/n)");
+                String confirm = catchString();
+                if (confirm.equals("y")) {
+                    sure = true;
+                    createdPlayers.get(currentPlayer).project.get(chosenNumber).signProject();
+                    System.out.println(createdPlayers.get(currentPlayer).project.get(chosenNumber));
+                }
+            } else if (createdPlayers.get(currentPlayer).project.get(chosenNumber).signed == true) {
+                System.out.println("Podpisano już ten kontrakt");
+                skip = true;
                 sure = true;
-                createdPlayers.get(currentPlayer).project.get(chosenNumber).signProject();
-                System.out.println(createdPlayers.get(currentPlayer).project.get(chosenNumber));
+                waitClick();
             }
         } while (sure == false);
 
@@ -434,13 +382,15 @@ public class Player {
 
 
     public static void workersMenu() {
-        System.out.println("Menu Pracowników");
-        System.out.println("1 Wyświetl pracowników");
-        System.out.println("2 Zatrudnij Pracownika");
+
 
         Integer chosenNumber;
         do {
-            chosenNumber = catchNumber(1, 3);
+            System.out.println("Menu Pracowników");
+            System.out.println("0 Wróc do Menu");
+            System.out.println("1 Wyświetl pracowników");
+            System.out.println("2 Zatrudnij Pracownika");
+            chosenNumber = catchNumber(0, 3);
 
             switch (chosenNumber) {
                 case 1: {
@@ -451,7 +401,10 @@ public class Player {
                     hireWorker();
                     break;
                 }
-
+                case 0: {
+                    skip = true;
+                    break;
+                }
 
             }
 
@@ -468,18 +421,18 @@ public class Player {
     }
 
     public static void showPlayerWorkers() {
-        for (int i = 0; i < allWorkers.size(); i++) {
+        for (int i = 0; i < playerWorker.size(); i++) {
             int workerNumber = i + 1;
             System.out.println(workerNumber + "    " + playerWorker.get(i));
         }
     }
 
     public static void hireWorker() {
-        System.out.println("0 Wraca do Menu");
+        System.out.println("Którego Pracownika chcesz zatrudnić?" + "\n" + "0 Wraca do Menu");
         showAllWorkers();
         Integer chosenNumber = catchNumber(0, allWorkers.size());
         if (chosenNumber != 0) {
-            addWorkerToPlayer(chosenNumber = catchNumber(1, allWorkers.size()) + 1);
+            addWorkerToPlayer(chosenNumber - 1);
             System.out.println(playerWorker.toString());
         }
 
@@ -487,22 +440,219 @@ public class Player {
     }
 
     public static void addBasicWorkers() {
-        Worker Kamil = new Worker("Kamil");
-        Worker Adam = new Worker("Adam");
-        Worker Maciej = new Worker("Maciej");
-        Worker Borek = new Worker("Borek");
-        Worker Michał = new Worker("Michał");
-        Worker Marcin = new Worker("Marcin");
-        Worker Mateusz = new Worker("Mateusz");
-        allWorkers.add(Kamil);
-        allWorkers.add(Adam);
-        allWorkers.add(Maciej);
-        allWorkers.add(Borek);
-        allWorkers.add(Michał);
-        allWorkers.add(Marcin);
-        allWorkers.add(Mateusz);
+        allWorkers.add(new Worker("Kamil"));
+        allWorkers.add(new Worker("Adam"));
+        allWorkers.add(new Worker("Maciej"));
+        allWorkers.add(new Worker("Borek"));
+        allWorkers.add(new Worker("Borek"));
+        allWorkers.add(new Worker("Marcin"));
+        allWorkers.add(new Worker("Mateusz"));
+
 
     }
+
+    public static void justPlayer() {
+        Worker Player = new Worker("Player");
+        justPlayer.add(Player);
+    }
+
+    public static void playerDoHisJob() {
+        justPlayer();
+        System.out.println("Wybierz projekt nad którym chcesz pracować");
+        showPlayerProjects();
+        Integer chosenNumber = catchNumber(0, createdPlayers.get(currentPlayer).project.size());
+        if (chosenNumber != 0) {
+            chosenNumber -= 1;
+            if (checkPlayerSignProject(chosenNumber) == true) {
+
+                for (Integer i = 0; i < createdPlayers.get(currentPlayer).project.size(); i++) {
+                    System.out.println(createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.toString() + "Przed");
+                    addingPlayerProjectStatus(chosenNumber);
+
+                    System.out.println(createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.toString() + "Po");
+                }
+            }
+        }
+    }
+
+    public static void fireWorker() {
+        System.out.println("0 Wraca do Menu");
+        if (playerWorker.size() == 0) {
+            System.out.println("Nie masz pracowników");
+        }
+        if (playerWorker.size() != 0) {
+            System.out.println("Wybierz pracownika kórego chcesz zwolnić");
+            showPlayerWorkers();
+            Integer chosenNumber = catchNumber(0, playerWorker.size());
+            if (chosenNumber == 0) {
+                skip = true;
+            }
+            if (chosenNumber != 0) {
+                playerWorker.remove(chosenNumber - 1);
+                /*showPlayerWorkers();*/
+            }
+        }
+    }
+
+    public static boolean checkPlayerSignProject(Integer chosenProject) {
+        if (
+                createdPlayers.get(currentPlayer).project.get(chosenProject).signed == false) {
+
+            System.out.println("Ten projekt nie jest podpisany, najpierw podpisz go z zleceniodwacą kontraktu");
+            return false;
+        }
+        return true;
+
+    }
+
+    public static void addingPlayerProjectStatus(Integer chosenNumber) {
+        if (createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.frontend + justPlayer.get(currentPlayer).frontend <= 100) {
+            createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.frontend += justPlayer.get(currentPlayer).frontend;
+        } else {
+            System.out.println("Twój projekt osiągnął 100 % w dziedzinie frontend");
+            createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.frontend = 100;
+        }
+        if (createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.backend + justPlayer.get(currentPlayer).backend <= 100) {
+            createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.backend += justPlayer.get(currentPlayer).backend;
+        } else {
+            System.out.println("Twój projekt osiągnął 100 % w dziedzinie backend");
+            createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.backend = 100;
+        }
+        if (createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.bazaDanych + justPlayer.get(currentPlayer).bazaDanych <= 100) {
+            createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.bazaDanych += justPlayer.get(currentPlayer).bazaDanych;
+            ;
+        } else {
+            System.out.println("Twój projekt osiągnął 100 % w dziedzinie bazaDanych");
+            createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.bazaDanych = 100;
+        }
+        if (createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.mobile + justPlayer.get(currentPlayer).mobile <= 100) {
+            createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.mobile += justPlayer.get(currentPlayer).mobile;
+            ;
+        } else {
+            System.out.println("Twój projekt osiągnął 100 % w dziedzinie mobile");
+            createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.mobile = 100;
+        }
+        if (createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.wordpress + justPlayer.get(currentPlayer).wordpress <= 100) {
+            createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.wordpress += justPlayer.get(currentPlayer).wordpress;
+            ;
+        } else {
+            System.out.println("Twój projekt osiągnął 100 % w dziedzinie wordpress");
+            createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.wordpress = 100;
+        }
+        if (createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.prestashop + justPlayer.get(currentPlayer).prestashop <= 100) {
+            createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.prestashop += justPlayer.get(currentPlayer).prestashop;
+            ;
+        } else {
+            System.out.println("Twój projekt osiągnął 100 % w dziedzinie prestashop");
+            createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.prestashop = 100;
+        }
+    }
+
+    public static void testProject() {
+
+        System.out.println("Testowanie projektu");
+        System.out.println("Który projekt chcesz przetestować");
+        System.out.println("0 wraca do menu");
+        boolean sure;
+
+        do {
+
+            sure = false;
+            for (int i = 0; i < createdPlayers.get(currentPlayer).project.size(); i++) {
+                Integer projectNumber = i + 1;
+                System.out.println("Nr Projektu to " + projectNumber + "    " + createdPlayers.get(currentPlayer).project.get(i));
+            }
+
+            Integer chosenNumber = catchNumber(0, createdPlayers.get(currentPlayer).project.size());
+            if (chosenNumber == 0) {
+                break;
+            }
+            chosenNumber -= 1;
+            if (createdPlayers.get(currentPlayer).project.get(chosenNumber).tested == false) {
+                if (projectEnded(chosenNumber) == true) {
+                    System.out.println("Potwierdź (y/n)");
+                    String confirm = catchString();
+                    if (confirm.equals("y")) {
+                        sure = true;
+                        createdPlayers.get(currentPlayer).project.get(chosenNumber).testProject();
+                        System.out.println(createdPlayers.get(currentPlayer).project.get(chosenNumber));
+                    }
+                }
+            } else if (createdPlayers.get(currentPlayer).project.get(chosenNumber).tested == true) {
+                System.out.println("Ten Projekt został już przetestowany");
+                skip = true;
+                sure = true;
+            }
+        }
+        while (sure == false);
+    }
+
+
+    public static boolean projectEnded(Integer chosenNumber) {
+        System.out.println(createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.frontend);
+        if (
+                createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.frontend == 100
+                        && createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.backend == 100
+                        && createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.bazaDanych == 100
+                        && createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.mobile == 100
+                        && createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.wordpress == 100
+                        && createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.prestashop == 100
+
+        ) {
+            return true;
+        } else {
+            System.out.println("Projekt się jeszcze nie skończył");
+            return false;
+        }
+    }
+
+    public void choseStartingProject() {
+
+
+        System.out.println("Do wyboru masz 3 projekty");
+        System.out.println("Wybierz projekty pod względem trudności ");
+        System.out.println("Projekt wybiera  ===> " + this.name);
+        System.out.println("1. Ławty ");
+        System.out.println("2. Średni ");
+        System.out.println("3. Ciężki ");
+        boolean done = false;
+        do {
+            int chosenNumber = catchNumber(1, 3);
+            //generuje projekty na początek gry
+            switch (chosenNumber) {
+
+                case 1 -> {
+                    System.out.println("Projekt łatwy");
+                    this.addProject(generateEasyProject());
+                    done = true;
+
+
+                }
+                case 2 -> {
+                    System.out.println("Projekt średni");
+                    this.addProject(generateMediumProject());
+                    done = true;
+
+
+                }
+
+                case 3 -> {
+                    System.out.println("Projekt ćiężki");
+                    this.addProject(generateHardProject());
+                    done = true;
+
+                }
+                default -> {
+                    System.out.println("Zły wybór.");
+                }
+            }
+
+
+        } while (!done);
+
+    }
+
+
 }
 
 
