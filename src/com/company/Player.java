@@ -3,7 +3,10 @@ package com.company;
 import Projects.Project;
 
 import java.security.SecureRandom;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,7 +14,7 @@ import java.util.Scanner;
 public class Player {
     public static int day = 1;
     public String name;
-    public Integer money = 1000;
+    public Integer money;
     public Integer employee;
     public Integer availableProjectDays = 0;
     public Integer daySpentOnLookingForEmployee = 0;
@@ -23,7 +26,6 @@ public class Player {
     static String playerName;
     public static int b = 0;
     public static boolean skip = false;
-    public static int mistake = 0;
     static List<String> playerList = new ArrayList<>(numberOfPlayers);
     public static int currentPlayer = 0;
     public static ArrayList<Player> createdPlayers;
@@ -34,14 +36,13 @@ public class Player {
     public static ArrayList<Worker> justPlayer = new ArrayList<>();
     public static ArrayList<PaymentDelay> moneyDelay = new ArrayList<>();
     public static Integer moneySpentOnLookingForEmployer;
-    public boolean doneCreatingWorkers = false;
 
-    public Player(String name, Integer money, Integer employee, Integer availableProjectDays, Integer daySpentOnLookingForEmployee) {
+    public Player(String name) {
         this.name = name;
-        this.money = money = 1000;
-        this.employee = employee = 0;
-        this.availableProjectDays = Player.this.availableProjectDays = 0;
-        this.daySpentOnLookingForEmployee = daySpentOnLookingForEmployee = 0;
+        this.money = 1000;
+        this.employee = 0;
+        this.availableProjectDays = 0;
+        this.daySpentOnLookingForEmployee = 0;
         this.moneySpentOnLookingForEmployer = 0;
     }
 
@@ -75,19 +76,6 @@ public class Player {
     }
 
 
-    public void getEmployee() {
-        if (daySpentOnLookingForEmployee == 5) {
-            employee = employee + 1;
-            daySpentOnLookingForEmployee = 0;
-
-        } else {
-            daySpentOnLookingForEmployee = daySpentOnLookingForEmployee + 1;
-        }
-
-
-    }
-
-
     public static void menu() {
 
 
@@ -101,7 +89,7 @@ public class Player {
         System.out.println("6.Zatrudnić nowego pracownika");
         System.out.println("7.Zwolnić pracownika");
         System.out.println("8.Przeznaczyć dzień na rozliczenia z urzędami (jeśli nie poświęcisz na to 2 dni w miesiącu ZUS wjeżdża z taką kontrolą, że zamykasz firmę z długami)");
-        Integer chosenNumber = catchNumber(1, 10);
+        Integer chosenNumber = catchNumber(1, 11);
 
         switch (chosenNumber) {
             case 1 -> {
@@ -139,7 +127,8 @@ public class Player {
             case 9 -> {
                 showPlayerProjects();
             }
-            case 10 -> createdPlayers.get(currentPlayer).project.add(generateEndedProject());
+            case 10 -> createdPlayers.get(currentPlayer).project.add(generateHardProject());
+            case 11 -> createdPlayers.get(currentPlayer).project.add(generateEndedProject());
 
             default -> {
                 skip = true;
@@ -155,20 +144,14 @@ public class Player {
 
             currentPlayer = 0;
 
-            for (int i = 1; i <= numberOfPlayers + mistake; i++) {
+            for (int i = 1; i <= numberOfPlayers; i++) {
                 System.out.println(createdPlayers.get(currentPlayer) + "\n");
                 System.out.println("Kolejność graczy to :" + playerList);
                 System.out.println("Ruch gracza: " + playerList.get(0)); //pokazuje gracza
-
+                printDate();
                 menu();
-
-                if (!skip) {
-                    playerList.add(playerList.get(0)); //ustawnienie obecnego gracza na koniec kolejki
-                    playerList.remove(0);  //usuwa gracza obecnego z kolejki
-                    currentPlayer += 1;
-
-                }
-
+                turnEnd();
+                setNextPlayer();
             }
             currentPlayer = 0;
 
@@ -184,11 +167,24 @@ public class Player {
     }
 
     //pobiera string od uzytkownika
-    public static String catchString() {
+    public static String catchString(String possibleInput1, String possibleInput2) {
+        while (possibleInput1.equals("y") && possibleInput2.equals("n")) {
+            Scanner scan = new Scanner(System.in);
+            String a = scan.nextLine();
+            if (a.equals("y") || a.equals("n")) {
+
+                return a;
+            }
+            System.out.println("Do wyboru masz tylko (y/n)");
+        }
+
         Scanner scan = new Scanner(System.in);
         String a = scan.nextLine();
+
+
         return a;
     }
+
 
     //pobiera cyfre od uzytkownika
     public static Integer catchNumber(Integer min, Integer max) {
@@ -237,7 +233,7 @@ public class Player {
 
         for (int i = 1; i <= numberOfPlayers; i++) {
             System.out.println("Wprowadź imie gracza nr " + i);
-            playerName = catchString();
+            playerName = catchString("0", "0");
             if (playerName == "") {
                 System.out.printf("Bozia rączek nie dała" + "\n" + "A więc będziesz graczem o nazwie:" + i);
                 playerName = "Gracz " + i;
@@ -250,7 +246,7 @@ public class Player {
         ArrayList<Player> currentplayers = new ArrayList<>();
         for (int i = 1; i <= numberOfPlayers; i++) {
 
-            Player CreatedPlayer = new Player(playerList.get(i - 1), 1000, 0, 0, 0);
+            Player CreatedPlayer = new Player(playerList.get(i - 1));
             currentplayers.add(CreatedPlayer);
         }
         return currentplayers;
@@ -275,7 +271,7 @@ public class Player {
     }
 
     public static void getClient() {
-        System.out.println("Chcesz szukać klienta?");
+        System.out.println("Szukanie klienta");
         if (createdPlayers.get(currentPlayer).availableProjectDays == 5) {
             Integer RNG = getRandomNumber(1, 3);
             if (RNG == 1) {
@@ -300,6 +296,13 @@ public class Player {
 
             createdPlayers.get(currentPlayer).availableProjectDays = 0;
         } else {
+
+            Integer dayLeft = 5 - createdPlayers.get(currentPlayer).availableProjectDays;
+            if (dayLeft > 1) {
+                System.out.println("Zostały " + dayLeft + " dni, aby znaleźć następnego klienta");
+            } else {
+                System.out.println("Zostały ostatni dzień poszukiwań, aby znaleźć klienta");
+            }
             createdPlayers.get(currentPlayer).availableProjectDays += 1;
         }
 
@@ -310,12 +313,13 @@ public class Player {
         System.out.println("Który projekt chcesz podpisać");
 
         boolean sure;
+
+        sure = false;
+        for (int i = 0; i < createdPlayers.get(currentPlayer).project.size(); i++) {
+            Integer projectNumber = i + 1;
+            System.out.println("Nr Projektu to " + projectNumber + "    " + createdPlayers.get(currentPlayer).project.get(i));
+        }
         do {
-            sure = false;
-            for (int i = 0; i < createdPlayers.get(currentPlayer).project.size(); i++) {
-                Integer projectNumber = i + 1;
-                System.out.println("Nr Projektu to " + projectNumber + "    " + createdPlayers.get(currentPlayer).project.get(i));
-            }
             Integer chosenNumber = catchNumber(0, createdPlayers.get(currentPlayer).project.size());
             if (chosenNumber == 0) {
                 break;
@@ -323,7 +327,7 @@ public class Player {
             chosenNumber -= 1;
             if (!createdPlayers.get(currentPlayer).project.get(chosenNumber).signed) {
                 System.out.println("Potwierdź (y/n)");
-                String confirm = catchString();
+                String confirm = catchString("y", "n");
                 if (confirm.equals("y")) {
                     sure = true;
                     createdPlayers.get(currentPlayer).project.get(chosenNumber).signProject();
@@ -333,7 +337,7 @@ public class Player {
                 System.out.println("Podpisano już ten kontrakt");
                 skip = true;
                 sure = true;
-                waitClick();
+
             }
         } while (sure == false);
 
@@ -342,7 +346,7 @@ public class Player {
     public static void showPlayerProjects() {
         for (int i = 0; i < createdPlayers.get(currentPlayer).project.size(); i++) {
             Integer projectnumber = i + 1;
-            System.out.println("Projekt " + projectnumber + "    " + createdPlayers.get(currentPlayer).project.get(i));
+            System.out.println("Projekt " + projectnumber + "    " + createdPlayers.get(currentPlayer).project.get(i).Progress);
         }
     }
 
@@ -354,7 +358,7 @@ public class Player {
     }
 
     public static void waitClick() {
-        catchString();
+        catchString("0", "0");
     }
 
     public Integer checkPlayerWorkersTester() {
@@ -396,11 +400,12 @@ public class Player {
             switch (chosenNumber) {
                 case 1: {
                     showAllWorkers();
-                    break;
+
                 }
                 case 2: {
                     hireWorker();
-                    break;
+                    chosenNumber = 0;
+
                 }
                 case 0: {
                     skip = true;
@@ -464,14 +469,24 @@ public class Player {
         Integer chosenNumber = catchNumber(0, createdPlayers.get(currentPlayer).project.size());
         if (chosenNumber != 0) {
             chosenNumber -= 1;
-            if (checkPlayerSignProject(chosenNumber) == true) {
+            if (!projectEnded(chosenNumber)) {
+                if (checkPlayerSignProject(chosenNumber)) {
 
-                for (Integer i = 0; i < createdPlayers.get(currentPlayer).project.size(); i++) {
-                    System.out.println(createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.toString() + "Przed");
+
+                    System.out.println("Przed   " + createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.toString());
                     addingPlayerProjectStatus(chosenNumber);
 
-                    System.out.println(createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.toString() + "Po");
+                    System.out.println("Po      " + createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.toString());
+
                 }
+                if (!checkPlayerSignProject(chosenNumber)) {
+                    System.out.println("Ten projekt nie jest podpisany, najpierw podpisz go z zleceniodwacą kontraktu");
+                    skip = true;
+                }
+            }
+
+            if (projectEnded(chosenNumber)) {
+                System.out.println("Jak chcesz pracowac nad skonczonnym projektem");
             }
         }
     }
@@ -497,9 +512,9 @@ public class Player {
 
     public static boolean checkPlayerSignProject(Integer chosenProject) {
         if (
-                createdPlayers.get(currentPlayer).project.get(chosenProject).signed == false) {
+                !createdPlayers.get(currentPlayer).project.get(chosenProject).signed) {
 
-            System.out.println("Ten projekt nie jest podpisany, najpierw podpisz go z zleceniodwacą kontraktu");
+
             return false;
         }
         return true;
@@ -510,41 +525,41 @@ public class Player {
         if (createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.frontend + justPlayer.get(currentPlayer).frontend <= 100) {
             createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.frontend += justPlayer.get(currentPlayer).frontend;
         } else {
-            System.out.println("Twój projekt osiągnął 100 % w dziedzinie frontend");
+
             createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.frontend = 100;
         }
         if (createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.backend + justPlayer.get(currentPlayer).backend <= 100) {
             createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.backend += justPlayer.get(currentPlayer).backend;
         } else {
-            System.out.println("Twój projekt osiągnął 100 % w dziedzinie backend");
+
             createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.backend = 100;
         }
         if (createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.bazaDanych + justPlayer.get(currentPlayer).bazaDanych <= 100) {
             createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.bazaDanych += justPlayer.get(currentPlayer).bazaDanych;
             ;
         } else {
-            System.out.println("Twój projekt osiągnął 100 % w dziedzinie bazaDanych");
+
             createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.bazaDanych = 100;
         }
         if (createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.mobile + justPlayer.get(currentPlayer).mobile <= 100) {
             createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.mobile += justPlayer.get(currentPlayer).mobile;
             ;
         } else {
-            System.out.println("Twój projekt osiągnął 100 % w dziedzinie mobile");
+
             createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.mobile = 100;
         }
         if (createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.wordpress + justPlayer.get(currentPlayer).wordpress <= 100) {
             createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.wordpress += justPlayer.get(currentPlayer).wordpress;
             ;
         } else {
-            System.out.println("Twój projekt osiągnął 100 % w dziedzinie wordpress");
+
             createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.wordpress = 100;
         }
         if (createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.prestashop + justPlayer.get(currentPlayer).prestashop <= 100) {
             createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.prestashop += justPlayer.get(currentPlayer).prestashop;
             ;
         } else {
-            System.out.println("Twój projekt osiągnął 100 % w dziedzinie prestashop");
+
             createdPlayers.get(currentPlayer).project.get(chosenNumber).Progress.prestashop = 100;
         }
     }
@@ -569,17 +584,17 @@ public class Player {
                 break;
             }
             chosenNumber -= 1;
-            if (createdPlayers.get(currentPlayer).project.get(chosenNumber).tested == false) {
-                if (projectEnded(chosenNumber) == true) {
+            if (!createdPlayers.get(currentPlayer).project.get(chosenNumber).tested) {
+                if (projectEnded(chosenNumber)) {
                     System.out.println("Potwierdź (y/n)");
-                    String confirm = catchString();
+                    String confirm = catchString("y", "n");
                     if (confirm.equals("y")) {
                         sure = true;
                         createdPlayers.get(currentPlayer).project.get(chosenNumber).testProject();
                         System.out.println(createdPlayers.get(currentPlayer).project.get(chosenNumber));
                     }
                 }
-            } else if (createdPlayers.get(currentPlayer).project.get(chosenNumber).tested == true) {
+            } else if (createdPlayers.get(currentPlayer).project.get(chosenNumber).tested) {
                 System.out.println("Ten Projekt został już przetestowany");
                 skip = true;
                 sure = true;
@@ -703,73 +718,187 @@ public class Player {
             chosenNumber -= 1;
             if (checkIfProjectIsCompleted(chosenNumber)) {
                 System.out.println("Czy na pewno chcesz oddać projekt? (y/n)");
-                String input = catchString();
+                String input = catchString("y", "n");
+                createdPlayers.get(currentPlayer).project.get(chosenNumber).clientBehaviour.ClientType = "Wymagający";
                 if (input.equals("y")) {
-                    System.out.println(createdPlayers.get(currentPlayer).project.get(chosenNumber).clientBehaviour.toString()+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
-                    if (createdPlayers.get(currentPlayer).project.get(chosenNumber).clientBehaviour.equals("Wyluzowany")) {
+                    if (createdPlayers.get(currentPlayer).project.get(chosenNumber).clientBehaviour.ClientType.equals("Wyluzowany")) {
 
 
                         if (fortuneWheel(30)) {
+
+                            System.out.println("Projekt nie miał błędów i został oddany" + "\n" + "Pieniądze za projekt przyjdą za 7 dni");
                             moneyDelay.add(new PaymentDelay(createdPlayers.get(currentPlayer).project.get(chosenNumber).income, 7));
+                            removePlayerProject(chosenNumber);
                         } else {
-                            createdPlayers.get(currentPlayer).money += createdPlayers.get(currentPlayer).project.get(chosenNumber).income;
+                            System.out.println("Projekt nie miał błędów i został oddany");
+                            System.out.println("Pieniążki na koncie");
+                            playerAddMoney(projectIncome(chosenNumber));
+                            removePlayerProject(chosenNumber);
                         }
 
 
-                    }
-
-
-                    if (createdPlayers.get(currentPlayer).project.get(chosenNumber).clientBehaviour.equals("Wymagający")) {
+                    } else if (createdPlayers.get(currentPlayer).project.get(chosenNumber).clientBehaviour.ClientType.equals("Wymagający")) {
                         if (checkIfProjectWorks(chosenNumber)) {
                             System.out.println("Projekt nie miał błędów i został oddany");
-                            createdPlayers.get(currentPlayer).money += createdPlayers.get(currentPlayer).project.get(chosenNumber).income;
-                            createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                            System.out.println("Pieniążki na koncie");
+                            playerAddMoney(projectIncome(chosenNumber));
+                            removePlayerProject(chosenNumber);
 
 
                         } else {
                             if (fortuneWheel(50)) {
                                 System.out.println("Projekt miał błąd ale klient nie zauważył");
-                                createdPlayers.get(currentPlayer).money += createdPlayers.get(currentPlayer).project.get(chosenNumber).income;
-                                createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                                System.out.println("Pieniążki na koncie");
+                                playerAddMoney(projectIncome(chosenNumber));
+                                ;
+                                removePlayerProject(chosenNumber);
                             } else {
                                 System.out.println("Projekt przepadł na zawsze, miał błędy, 0 incomu, unlucki");
-                                createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                                removePlayerProject(chosenNumber);
                             }
                         }
 
-                    }
-                    if (createdPlayers.get(currentPlayer).project.get(chosenNumber).clientBehaviour.equals("Skurwiel")) {
+                    } else if (createdPlayers.get(currentPlayer).project.get(chosenNumber).clientBehaviour.ClientType.equals("Skurwiel")) {
                         if (checkIfProjectWorks(chosenNumber)) {
                             if (fortuneWheel(30)) {
+                                System.out.println("Projekt nie miał błędów i został oddany");
                                 System.out.println("Skurwiel da pieniądze za tydzień");
                                 moneyDelay.add(new PaymentDelay(createdPlayers.get(currentPlayer).project.get(chosenNumber).income, 7));
-                                createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                                removePlayerProject(chosenNumber);
                             } else if (fortuneWheel(5)) {
+                                System.out.println("Projekt nie miał błędów i został oddany");
                                 System.out.println("Skurwiel da pieniądze za miesiąc");
                                 moneyDelay.add(new PaymentDelay(createdPlayers.get(currentPlayer).project.get(chosenNumber).income, 30));
-                                createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                                removePlayerProject(chosenNumber);
                             } else if (fortuneWheel(1)) {
-                                createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                                System.out.println("Projekt nie miał błędów i został oddany");
+                                System.out.println("Skurwiel nie da ani centa");
+                                removePlayerProject(chosenNumber);
 
                             } else {
+                                System.out.println("Projekt nie miał błędów i został oddany");
                                 System.out.println("Wszystko OK klient zapłacił");
-                                createdPlayers.get(currentPlayer).money += createdPlayers.get(currentPlayer).project.get(chosenNumber).income;
-                                createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                                playerAddMoney(projectIncome(chosenNumber));
+                                removePlayerProject(chosenNumber);
                             }
                         } else {
                             System.out.println("Twój projek miał błąd, a klient nie godzi się na błędy i mówi papa");
-                            createdPlayers.get(currentPlayer).project.remove(chosenNumber);
+                            removePlayerProject(chosenNumber);
                         }
                     }
                 }
 
             }
         }
-        createdPlayers.get(currentPlayer).project.remove(chosenNumber);
 
 
     }
 
+    public static void turnEnd() {
+        if (!skip) {
+            Integer i;
+            for (i = 0; i < moneyDelay.size(); i++) {
+                if (moneyDelay.size() > 0) {
+                    moneyDelay.get(i).dayDelay -= 1;
+                    if (moneyDelay.get(i).dayDelay == 0) {
+                        createdPlayers.get(currentPlayer).money += moneyDelay.get(i).money;
 
+                    }
+                }
+            }
+            for (int counterProject = 0; counterProject < createdPlayers.get(currentPlayer).project.size(); counterProject++) {
+                if (playerWorker.size() > 0) {
+
+                    for (int workerCounter = 0; workerCounter < playerWorker.size(); workerCounter++) {
+
+
+                        if (checkPlayerSignProject(counterProject)) {
+
+                            workerJob(workerCounter, counterProject);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+    private static void workerJob(Integer currentWorker, Integer currentProject) {
+
+        if (createdPlayers.get(currentPlayer).project.get(currentProject).Progress.frontend + playerWorker.get(currentWorker).frontend <= 100) {
+            createdPlayers.get(currentPlayer).project.get(currentProject).Progress.frontend += playerWorker.get(currentWorker).frontend;
+        } else {
+
+            createdPlayers.get(currentPlayer).project.get(currentProject).Progress.frontend = 100;
+        }
+        if (createdPlayers.get(currentPlayer).project.get(currentProject).Progress.backend + playerWorker.get(currentWorker).backend <= 100) {
+            createdPlayers.get(currentPlayer).project.get(currentProject).Progress.backend += playerWorker.get(currentWorker).backend;
+        } else {
+
+            createdPlayers.get(currentPlayer).project.get(currentProject).Progress.backend = 100;
+        }
+        if (createdPlayers.get(currentPlayer).project.get(currentProject).Progress.bazaDanych + playerWorker.get(currentWorker).bazaDanych <= 100) {
+            createdPlayers.get(currentPlayer).project.get(currentProject).Progress.bazaDanych += playerWorker.get(currentWorker).bazaDanych;
+            ;
+        } else {
+
+            createdPlayers.get(currentPlayer).project.get(currentProject).Progress.bazaDanych = 100;
+        }
+        if (createdPlayers.get(currentPlayer).project.get(currentProject).Progress.mobile + playerWorker.get(currentWorker).mobile <= 100) {
+            createdPlayers.get(currentPlayer).project.get(currentProject).Progress.mobile += playerWorker.get(currentWorker).mobile;
+            ;
+        } else {
+
+            createdPlayers.get(currentPlayer).project.get(currentProject).Progress.mobile = 100;
+        }
+        if (createdPlayers.get(currentPlayer).project.get(currentProject).Progress.wordpress + playerWorker.get(currentWorker).wordpress <= 100) {
+            createdPlayers.get(currentPlayer).project.get(currentProject).Progress.wordpress += playerWorker.get(currentWorker).wordpress;
+            ;
+        } else {
+
+            createdPlayers.get(currentPlayer).project.get(currentProject).Progress.wordpress = 100;
+        }
+        if (createdPlayers.get(currentPlayer).project.get(currentProject).Progress.prestashop + playerWorker.get(currentWorker).prestashop <= 100) {
+            createdPlayers.get(currentPlayer).project.get(currentProject).Progress.prestashop += playerWorker.get(currentWorker).prestashop;
+            ;
+        } else {
+
+            createdPlayers.get(currentPlayer).project.get(currentProject).Progress.prestashop = 100;
+        }
+
+    }
+
+    public static void setNextPlayer() {
+        if (!skip) {
+            playerList.add(playerList.get(0)); //ustawnienie obecnego gracza na koniec kolejki
+            playerList.remove(0);  //usuwa gracza obecnego z kolejki
+            currentPlayer += 1;
+
+        }
+
+    }
+
+    public static void printDate() {
+        System.out.println();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy ");
+
+
+        //get current date time with Date()
+        Date date = new Date(120, 0, day);
+        System.out.println(dateFormat.format(date));
+
+    }
+
+    public static void removePlayerProject(Integer projectIndexToRemove) {
+        createdPlayers.get(currentPlayer).project.remove(createdPlayers.get(currentPlayer).project.get(projectIndexToRemove));
+    }
+
+    public static void playerAddMoney(Integer moneyToAdd) {
+        createdPlayers.get(currentPlayer).money += moneyToAdd;
+    }
+
+    public static Integer projectIncome(Integer chosenNumber) {
+        return createdPlayers.get(currentPlayer).project.get(chosenNumber).income;
+    }
 }
