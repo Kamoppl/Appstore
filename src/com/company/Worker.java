@@ -26,18 +26,24 @@ public class Worker {
 
 
     public String toString() {
-        return "Worker{" +
-                "cost=" + cost +
-                ", jobPostion='" + jobPostion + '\'' +
-                ", frontend=" + frontend +
-                ", backend=" + backend +
-                ", bazaDanych=" + bazaDanych +
-                ", mobile=" + mobile +
-                ", wordpress=" + wordpress +
-                ", prestashop=" + prestashop +
-                ", tester=" + tester +
-                ", seller=" + seller +
-                '}';
+        if (this.jobPostion.equals("Programista"))
+            return jobPostion +
+                    "    pensja  = " + cost +
+                    " To umie =>  " +
+                    ", frontend = " + frontend +
+                    ", backend = " + backend +
+                    ", bazaDanych = " + bazaDanych +
+                    ", mobile = " + mobile +
+                    ", wordpress = " + wordpress +
+                    ", prestashop = " + prestashop +
+                    '}';
+        if (this.jobPostion.equals("Tester")) {
+            return "Tester";
+        }
+        if (this.jobPostion.equals("Sprzedawca")) {
+            return "Sprzedawca";
+        }
+        return "";
     }
 
 
@@ -147,29 +153,8 @@ public class Worker {
             this.prestashop = 0;
             this.tester = 0;
             this.seller = 1;
-        }        if (workerName.equals("Paweł")) {
-            this.jobPostion = "friend";
-            this.cost = 1000;
-            this.frontend = 0;
-            this.backend = 0;
-            this.bazaDanych = 0;
-            this.mobile = 0;
-            this.wordpress = 0;
-            this.prestashop = 0;
-            this.tester = 0;
-            this.seller = 0;
-        }        if (workerName.equals("Cezary")) {
-            this.jobPostion = "friend";
-            this.cost = 1000;
-            this.frontend = 0;
-            this.backend = 0;
-            this.bazaDanych = 0;
-            this.mobile = 0;
-            this.wordpress = 0;
-            this.prestashop = 0;
-            this.tester = 0;
-            this.seller = 0;
-        }        if (workerName.equals("Artur")) {
+        }
+        if (workerName.equals("Paweł")) {
             this.jobPostion = "friend";
             this.cost = 1000;
             this.frontend = 0;
@@ -181,7 +166,30 @@ public class Worker {
             this.tester = 0;
             this.seller = 0;
         }
-
+        if (workerName.equals("Cezary")) {
+            this.jobPostion = "friend";
+            this.cost = 1000;
+            this.frontend = 0;
+            this.backend = 0;
+            this.bazaDanych = 0;
+            this.mobile = 0;
+            this.wordpress = 0;
+            this.prestashop = 0;
+            this.tester = 0;
+            this.seller = 0;
+        }
+        if (workerName.equals("Artur")) {
+            this.jobPostion = "friend";
+            this.cost = 1000;
+            this.frontend = 0;
+            this.backend = 0;
+            this.bazaDanych = 0;
+            this.mobile = 0;
+            this.wordpress = 0;
+            this.prestashop = 0;
+            this.tester = 0;
+            this.seller = 0;
+        }
 
 
     }

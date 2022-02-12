@@ -98,7 +98,7 @@ public class Player {
         System.out.println("6.Zatrudnić nowego pracownika");
         System.out.println("7.Zwolnić pracownika");
         System.out.println("8.Przeznaczyć dzień na rozliczenia z urzędami (jeśli nie poświęcisz na to 2 dni w miesiącu ZUS wjeżdża z taką kontrolą, że zamykasz firmę z długami)");
-        Integer chosenNumber = catchNumber(1, 8);
+        Integer chosenNumber = catchNumber(1, 9);
 
         switch (chosenNumber) {
             case 1 -> {
@@ -131,6 +131,12 @@ public class Player {
             }
             case 8 -> {
                 increaseZusDay();
+                waitClick();
+            }
+            case 9 -> {
+                for (int i = 0 ; i < createdPlayers.get(currentPlayer).project.size();i++){
+                    System.out.println(createdPlayers.get(currentPlayer).project.get(i).deadLine);
+                }
                 waitClick();
             }
 
@@ -175,10 +181,11 @@ public class Player {
                     payDayMoneyToPlayer();
 
                     menu();
-
-                    turnEnd();
-                    lowerDayInProject();
-                    sellerMove();
+                    if (!skip) {
+                        turnEnd();
+                        lowerDayInProject();
+                        sellerMove();
+                    }
                 }
 
 
@@ -393,6 +400,7 @@ public class Player {
         do {
             Integer chosenNumber = catchNumber(0, createdPlayers.get(currentPlayer).project.size());
             if (chosenNumber == 0) {
+                skip = true;
                 break;
             }
             chosenNumber -= 1;
@@ -571,7 +579,7 @@ public class Player {
         allWorkers.add(new Worker("Adam"));
         allWorkers.add(new Worker("Maciej"));
         allWorkers.add(new Worker("Borek"));
-        allWorkers.add(new Worker("Borek"));
+        allWorkers.add(new Worker("Michał"));
         allWorkers.add(new Worker("Marcin"));
         allWorkers.add(new Worker("Mateusz"));
         allFriends.add(new Worker("Paweł"));
@@ -831,6 +839,7 @@ public class Player {
             return true;
         }
         System.out.println("Twój projekt jest jeszcze nie skończony");
+        skip = true;
         return false;
     }
 
@@ -941,9 +950,11 @@ public class Player {
 
 
                         if (checkPlayerSignProject(counterProject)) {
-
+                            if (!createdPlayers.get(currentPlayer).project.get(counterProject).prePaymenDone) {
+                                prepayment(counterProject);
+                            }
                             workerJob(workerCounter, counterProject);
-                            prepayment(counterProject);
+
                         }
                     }
                 }
@@ -1031,6 +1042,7 @@ public class Player {
                     System.out.println("Nie zdązyłeś oddać projetku nr" + createdPlayers.get(currentPlayer).project.get(i).projectName + "  na czas");
                     System.out.println("Kara wynosi  " + createdPlayers.get(currentPlayer).project.get(i).penaltyCost);
                     createdPlayers.get(currentPlayer).money -= createdPlayers.get(currentPlayer).project.get(i).penaltyCost;
+                    createdPlayers.get(currentPlayer).project.remove(createdPlayers.get(currentPlayer).project.get(i));
                 }
             }
         }
@@ -1044,7 +1056,7 @@ public class Player {
                     if (!moneyDelay.get(i).touchedByPlayer) {
                         if (!moneyDelay.get(i).gottenBySeller) {
                             createdPlayers.get(currentPlayer).bigProject += 1;
-                            System.out.println("Masz juz " +  createdPlayers.get(currentPlayer).bigProject +" dużych projektów");
+                            System.out.println("Masz juz " + createdPlayers.get(currentPlayer).bigProject + " dużych projektów");
 
 
                         }
@@ -1079,7 +1091,7 @@ public class Player {
                 Integer chosenNumber = catchNumber(0, allProjects.size());
                 if (chosenNumber != 0) {
                     createdPlayers.get(currentPlayer).project.add(allProjects.get(chosenNumber - 1));
-                    createdPlayers.get(currentPlayer).project.get(-1).gottenBySeller = true;
+                    createdPlayers.get(currentPlayer).project.get(createdPlayers.get(currentPlayer).project.size() - 1).gottenBySeller = true;
                     allProjects.remove(chosenNumber - 1);
                 }
 
@@ -1212,6 +1224,7 @@ public class Player {
             createdPlayers.get(currentPlayer).money += createdPlayers.get(currentPlayer).project.get(projectNumber).income / 2;
             createdPlayers.get(currentPlayer).project.get(projectNumber).income = createdPlayers.get(currentPlayer).project.get(projectNumber).income / 2;
             createdPlayers.get(currentPlayer).project.get(projectNumber).halfProjectMoney = true;
+            createdPlayers.get(currentPlayer).project.get(projectNumber).prePaymenDone = true;
         }
     }
 

@@ -18,6 +18,7 @@ public String level;
     public boolean touchedByPlayer;
     public boolean gottenBySeller;
     public boolean halfProjectMoney;
+    public boolean prePaymenDone;
     static final String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static SecureRandom rnd = new SecureRandom();
 
@@ -38,6 +39,7 @@ public String level;
             this.touchedByPlayer=false;
             this.gottenBySeller=false;
             this.halfProjectMoney=false;
+            this.prePaymenDone=false;
 
         }
         if (projectLevel.equals( "Medium")) {
@@ -53,6 +55,8 @@ public String level;
             this.touchedByPlayer=false;
             this.gottenBySeller=false;
             this.halfProjectMoney=false;
+            this.prePaymenDone=false;
+
         }
         if (projectLevel.equals( "Hard")) {
             this.level="Hard";
@@ -67,6 +71,8 @@ public String level;
             this.touchedByPlayer=false;
             this.gottenBySeller=false;
             this.halfProjectMoney=false;
+            this.prePaymenDone=false;
+
 
         }
         if (projectLevel.equals( "Ended")) {
@@ -84,6 +90,8 @@ public String level;
             this.touchedByPlayer=false;
             this.gottenBySeller=true;
             this.halfProjectMoney=false;
+            this.prePaymenDone=false;
+
 
         }
     }
@@ -98,15 +106,14 @@ public String level;
 
     public String toString() {
         return "Project{" +
-                "projectName='" + projectName + '\'' +
-                ", client='" + client + '\'' +
-                ", clientBehaviour='" + clientBehaviour + '\'' +
-                ", deadLine=" + deadLine +
-                ", penaltyCost=" + penaltyCost +
-                ", income=" + income +
-                ", payDay=" + payDay +
-                ", signed=" + signed +
-                ", tested=" + tested +
+                "Nazwa Projektu='" + projectName + '\'' +
+                ", Nazwa Klienta='" + client + '\'' +
+                ", ilość dni na zrobienie projektu = " + deadLine +
+                ", koszt w razie nie dotrzymania terminu = " + penaltyCost +
+                ", zysk = " + income +
+                ", umówiona ilość dni do otrzymania wypłaty=" + payDay +
+                ", czy podpisano projekt z klientem = " + signed +
+                ", czy proejkt został przetestowany = " + tested +
                 '}';
     }
     String randomString(int len) {
