@@ -89,39 +89,15 @@ public class ProjectProgress {
     }
 
 
-    public void increaseFrontEndComplete(Integer frontIncrease) {
-        this.frontend += frontIncrease;
-    }
 
-    public void increaseBackEndComplete(Integer backendIncrease) {
-        this.frontend += backendIncrease;
-    }
-
-    public void increaseBazaDanychComplete(Integer bazaDanychIncrease) {
-        this.frontend += bazaDanychIncrease;
-    }
-
-    public void increaseMobileComplete(Integer mobileIncrease) {
-        this.frontend += mobileIncrease;
-    }
-
-    public void increaseWordPressComplete(Integer wordPressIncrease) {
-        this.frontend += wordPressIncrease;
-    }
-
-    public void increasePrestaShopComplete(Integer prestaShopIncrease) {
-        this.frontend += prestaShopIncrease;
-    }
-
-    @Override
     public String toString() {
-        return "ProjectProgress{" +
-                "frontend=" + frontend +
-                ", backend=" + backend +
-                ", bazaDanych=" + bazaDanych +
-                ", mobile=" + mobile +
-                ", wordpress=" + wordpress +
-                ", prestashop=" + prestashop +
+        return "Statystyki projektu na dzień dzisiejszy" +
+                "frontend = " + frontend +
+                ", backend = " + backend +
+                ", bazaDanych = " + bazaDanych +
+                ", mobile = " + mobile +
+                ", wordpress = " + wordpress +
+                ", prestashop = " + prestashop +
                 '}';
     }
 }

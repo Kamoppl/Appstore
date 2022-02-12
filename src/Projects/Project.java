@@ -4,7 +4,7 @@ import com.company.Client;
 import java.security.SecureRandom;
 
 public class Project {
-
+public String level;
     public String projectName;
     public String client;
     public Client clientBehaviour;
@@ -15,6 +15,8 @@ public class Project {
     public boolean tested=false;
     public boolean signed = false;
     public ProjectProgress Progress;
+    public boolean touchedByPlayer;
+    public boolean gottenBySeller;
     static final String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static SecureRandom rnd = new SecureRandom();
 
@@ -23,6 +25,7 @@ public class Project {
 
     public  Project (String projectLevel) {
         if (projectLevel.equals( "Easy")) {
+            this.level="Easy";
             this.projectName = randomString(3);
             this.client = randomString(1);
             this.clientBehaviour= new Client();
@@ -31,9 +34,11 @@ public class Project {
             this.income = getRandomNumber(400, 1000);
             this.payDay = getRandomNumber(0, 1);
             this.Progress= new ProjectProgress("Easy");
-
+            this.touchedByPlayer=false;
+            this.gottenBySeller=false;
         }
         if (projectLevel.equals( "Medium")) {
+            this.level="Medium";
             this.projectName = randomString(5);
             this.client = client = randomString(3);
             this.clientBehaviour= new Client();
@@ -42,8 +47,11 @@ public class Project {
             this.income = getRandomNumber(1000, 2000);
             this.payDay = getRandomNumber(1, 2);
             this.Progress= new ProjectProgress("Medium");
+            this.touchedByPlayer=false;
+            this.gottenBySeller=false;
         }
         if (projectLevel.equals( "Hard")) {
+            this.level="Hard";
             this.projectName = randomString(7);
             this.client = randomString(5);
             this.clientBehaviour= new Client();
@@ -52,8 +60,11 @@ public class Project {
             this.income = getRandomNumber(2000, 3000);
             this.payDay = getRandomNumber(1, 2);
             this.Progress= new ProjectProgress("Hard");
+            this.touchedByPlayer=false;
+            this.gottenBySeller=false;
         }
         if (projectLevel.equals( "Ended")) {
+            this.level="Hard";
             this.projectName = randomString(1);
             this.client = randomString(1);
             this.deadLine = getRandomNumber(1,1);
@@ -64,6 +75,8 @@ public class Project {
             this.signed=true;
             this.tested=false;
             this.Progress= new ProjectProgress("Ended");
+            this.touchedByPlayer=false;
+            this.gottenBySeller=true;
         }
     }
 

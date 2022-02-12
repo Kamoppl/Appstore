@@ -40,9 +40,6 @@ public class Worker {
                 '}';
     }
 
-/*    public String toString() {
-        return "Worker" + jobPostion+" to jego cena =>" + cost;
-    }*/
 
     public Worker(String workerName) {
         if (workerName.equals("Player")) {
@@ -150,57 +147,43 @@ public class Worker {
             this.prestashop = 0;
             this.tester = 0;
             this.seller = 1;
+        }        if (workerName.equals("Paweł")) {
+            this.jobPostion = "friend";
+            this.cost = 1000;
+            this.frontend = 0;
+            this.backend = 0;
+            this.bazaDanych = 0;
+            this.mobile = 0;
+            this.wordpress = 0;
+            this.prestashop = 0;
+            this.tester = 0;
+            this.seller = 0;
+        }        if (workerName.equals("Cezary")) {
+            this.jobPostion = "friend";
+            this.cost = 1000;
+            this.frontend = 0;
+            this.backend = 0;
+            this.bazaDanych = 0;
+            this.mobile = 0;
+            this.wordpress = 0;
+            this.prestashop = 0;
+            this.tester = 0;
+            this.seller = 0;
+        }        if (workerName.equals("Artur")) {
+            this.jobPostion = "friend";
+            this.cost = 1000;
+            this.frontend = 0;
+            this.backend = 0;
+            this.bazaDanych = 0;
+            this.mobile = 0;
+            this.wordpress = 0;
+            this.prestashop = 0;
+            this.tester = 0;
+            this.seller = 0;
         }
 
 
-    }
-}
-/*
-    public static void createWorkers() {
-
-        //programisci
-        System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-        Worker Kamil = new Worker(2000, 25, 40, 30, 20, 0, 30, 0, 0);
-        allWorkers.set(0,Kamil);
-        Worker Adam = new Worker(1800, 15, 10, 40, 10, 10, 10, 0, 0);
-        allWorkers.add(Adam);
-        Worker Maciej = new Worker(3000, 40, 40, 10, 30, 35, 30, 0, 0);
-        allWorkers.add(Maciej);
-        Worker Borek = new Worker(2200, 30, 20, 10, 15, 40, 40, 0, 0);
-        allWorkers.add(Borek);
-        Worker Michał = new Worker(1500, 10, 30, 15, 40, 0, 0, 0, 0);
-        allWorkers.add(Michał);
-        Worker Marcin = new Worker(1600, 15, 10, 20, 20, 20, 25, 0, 0);
-        allWorkers.add(Marcin);
-        //tester
-        Worker Anna = new Worker(1500, 0, 0, 0, 0, 0, 0, 1, 0);
-        allWorkers.add(Anna);
-        //sprzedawca
-        Worker Mateusz = new Worker(1000, 0, 0, 0, 0, 0, 0, 0, 1);
-        allWorkers.add(Mateusz);
-
-
 
     }
 }
-*/
-
-/*
-
-    public static void addWorkers() {
-        createWorkers(false);
-        allWorkers.add(Kamil);
-        allWorkers.add(Adam);
-        allWorkers.add(Maciej);
-        allWorkers.add(Borek);
-        allWorkers.add(Michał);
-        allWorkers.add(Marcin);
-        //tester
-        allWorkers.add(Anna);
-        //programiści
-        allWorkers.add(Mateusz);
-    }
-
-}
-*/
 
