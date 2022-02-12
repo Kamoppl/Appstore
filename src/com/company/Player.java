@@ -42,6 +42,8 @@ public class Player {
     public static Integer month = 0;
     public boolean firstTurnSkip;
     public Integer bigProject;
+    public static Integer startingMoney;
+
 
     public Player(String name) {
         this.name = name;
@@ -56,7 +58,6 @@ public class Player {
     }
 
 
-
     public void addProject(Project addProject) {
         this.project.add(addProject);
     }
@@ -64,13 +65,13 @@ public class Player {
     public String toString() {
         if (playerProject != null)
             return
-         "Player{" +
-                "Imię gracza ='" + name + '\'' +
-                ", Pieniądze = " + money +
-                ", Dni szukania projektu =" + availableProjectDays +
-                ", Dni przeznaczone na Zus w tym miesiącu =" + zusDay +
-                 ", Dostepne projekty =" + project +
-                '}';
+                    "Player{" +
+                            "Imię gracza ='" + name + '\'' +
+                            ", Pieniądze = " + money +
+                            ", Dni szukania projektu =" + availableProjectDays +
+                            ", Dni przeznaczone na Zus w tym miesiącu =" + zusDay +
+                            ", Dostepne projekty =" + project +
+                            '}';
 
 
         else {
@@ -82,7 +83,6 @@ public class Player {
                     '}';
         }
     }
-
 
 
     public static void menu() {
@@ -152,6 +152,7 @@ public class Player {
     //gra się toczy
     public static void game() {
         addBasicWorkers();
+        startingMoney = createdPlayers.get(currentPlayer).money;
         while (!end) {
 
             currentPlayer = 0;
@@ -170,8 +171,9 @@ public class Player {
                 DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy ");
                 System.out.println(dateFormat.format(date));
                 if (!createdPlayers.get(currentPlayer).skipPlayer) {
+
                     payDayMoneyToPlayer();
-                    sellerMove();
+
                     menu();
 
                     turnEnd();
@@ -189,7 +191,7 @@ public class Player {
                 }
 
 
-                if (createdPlayers.get(currentPlayer).bigProject >= 3) {
+                if (createdPlayers.get(currentPlayer).bigProject >= 3 && createdPlayers.get(currentPlayer).money > startingMoney) {
                     end = true;
                     System.out.println("Zwyciężył ==========>  " + createdPlayers.get(currentPlayer).name + "  <==========");
                 }
@@ -941,6 +943,7 @@ public class Player {
                         if (checkPlayerSignProject(counterProject)) {
 
                             workerJob(workerCounter, counterProject);
+                            prepayment(counterProject);
                         }
                     }
                 }
@@ -1040,7 +1043,8 @@ public class Player {
                 if (moneyDelay.get(i).level.equals("Hard")) {
                     if (!moneyDelay.get(i).touchedByPlayer) {
                         if (!moneyDelay.get(i).gottenBySeller) {
-                             createdPlayers.get(currentPlayer).bigProject += 1;
+                            createdPlayers.get(currentPlayer).bigProject += 1;
+                            System.out.println("Masz juz " +  createdPlayers.get(currentPlayer).bigProject +" dużych projektów");
 
 
                         }
@@ -1193,6 +1197,22 @@ public class Player {
             }
         }
 
+    }
+
+    //zaliczka za połowę zapłaty projektu ( Zadanie 2)
+    public static void prepayment(Integer projectNumber) {
+        if (createdPlayers.get(currentPlayer).project.get(projectNumber).Progress.frontend >= 50 ||
+                createdPlayers.get(currentPlayer).project.get(projectNumber).Progress.backend >= 50 ||
+                createdPlayers.get(currentPlayer).project.get(projectNumber).Progress.bazaDanych >= 50 ||
+                createdPlayers.get(currentPlayer).project.get(projectNumber).Progress.mobile >= 50 ||
+                createdPlayers.get(currentPlayer).project.get(projectNumber).Progress.prestashop >= 50 ||
+                createdPlayers.get(currentPlayer).project.get(projectNumber).Progress.wordpress >= 50) {
+
+            System.out.println("Przyszła polowa wypłaty za projekt");
+            createdPlayers.get(currentPlayer).money += createdPlayers.get(currentPlayer).project.get(projectNumber).income / 2;
+            createdPlayers.get(currentPlayer).project.get(projectNumber).income = createdPlayers.get(currentPlayer).project.get(projectNumber).income / 2;
+            createdPlayers.get(currentPlayer).project.get(projectNumber).halfProjectMoney = true;
+        }
     }
 
 

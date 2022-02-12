@@ -18,6 +18,7 @@ public class Main {
         //Gra się toczy
         while (!end) {
             currentPlayer = 0;
+
             game();
         }
     }

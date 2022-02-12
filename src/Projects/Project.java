@@ -17,6 +17,7 @@ public String level;
     public ProjectProgress Progress;
     public boolean touchedByPlayer;
     public boolean gottenBySeller;
+    public boolean halfProjectMoney;
     static final String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static SecureRandom rnd = new SecureRandom();
 
@@ -36,6 +37,8 @@ public String level;
             this.Progress= new ProjectProgress("Easy");
             this.touchedByPlayer=false;
             this.gottenBySeller=false;
+            this.halfProjectMoney=false;
+
         }
         if (projectLevel.equals( "Medium")) {
             this.level="Medium";
@@ -49,6 +52,7 @@ public String level;
             this.Progress= new ProjectProgress("Medium");
             this.touchedByPlayer=false;
             this.gottenBySeller=false;
+            this.halfProjectMoney=false;
         }
         if (projectLevel.equals( "Hard")) {
             this.level="Hard";
@@ -62,6 +66,8 @@ public String level;
             this.Progress= new ProjectProgress("Hard");
             this.touchedByPlayer=false;
             this.gottenBySeller=false;
+            this.halfProjectMoney=false;
+
         }
         if (projectLevel.equals( "Ended")) {
             this.level="Hard";
@@ -77,6 +83,8 @@ public String level;
             this.Progress= new ProjectProgress("Ended");
             this.touchedByPlayer=false;
             this.gottenBySeller=true;
+            this.halfProjectMoney=false;
+
         }
     }
 
