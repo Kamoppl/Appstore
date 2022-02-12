@@ -98,7 +98,7 @@ public class Player {
         System.out.println("6.Zatrudnić nowego pracownika");
         System.out.println("7.Zwolnić pracownika");
         System.out.println("8.Przeznaczyć dzień na rozliczenia z urzędami (jeśli nie poświęcisz na to 2 dni w miesiącu ZUS wjeżdża z taką kontrolą, że zamykasz firmę z długami)");
-        Integer chosenNumber = catchNumber(1, 9);
+        Integer chosenNumber = catchNumber(1, 8);
 
         switch (chosenNumber) {
             case 1 -> {
@@ -131,12 +131,6 @@ public class Player {
             }
             case 8 -> {
                 increaseZusDay();
-                waitClick();
-            }
-            case 9 -> {
-                for (int i = 0 ; i < createdPlayers.get(currentPlayer).project.size();i++){
-                    System.out.println(createdPlayers.get(currentPlayer).project.get(i).deadLine);
-                }
                 waitClick();
             }
 
